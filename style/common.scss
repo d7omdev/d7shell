@@ -1,0 +1,47 @@
+@use "sass:string";
+@use "sass:color";
+@use "colors.scss" as *;
+
+$rounded-xs: 2px;
+$rounded-sm: 4px;
+$rounded-md: 6px;
+$rounded-lg: 8px;
+$rounded-xl: 12px;
+$rounded-2xl: 16px;
+$rounded-3xl: 24px;
+$rounded-full: 9999px;
+
+* {
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  border: none;
+  text-shadow: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  -gtk-icon-shadow: none;
+}
+
+icon {
+  box-shadow: none;
+  text-shadow: none;
+}
+
+slider {
+  border: none;
+  outline: none;
+  background: $inverse_surface_transparent_variant;
+}
+
+separator {
+  background: none;
+}
+
+window {
+  background: none;
+}
+
+label {
+  box-shadow: none;
+}

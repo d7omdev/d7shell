@@ -1,0 +1,9 @@
+@use "sass:string";
+@use "colors.scss" as *;
+
+@mixin rounded($radius) {
+  border-radius: $radius;
+}
+.corner-widget {
+  color: $surface_transparent;
+}

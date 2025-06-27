@@ -1,0 +1,37 @@
+@use "../colors.scss" as *;
+
+menubutton {
+  // Target the toggle button inside menubutton
+  button.toggle {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 0 5px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $inverse_surface_transparent;
+    }
+
+    &:active {
+      background-color: $inverse_surface_transparent_variant;
+    }
+  }
+
+  // Also target the general button for broader compatibility
+  button {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 0 5px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $inverse_surface_transparent;
+    }
+
+    &:active {
+      background-color: $inverse_surface_transparent_variant;
+    }
+  }
+}

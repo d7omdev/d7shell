@@ -1,0 +1,73 @@
+@use "sass:string";
+@use "sass:color";
+@use "../colors.scss" as *;
+@use "../common.scss" as *;
+
+.bar-container {
+  background: $surface_transparent;
+  color: $on_surface;
+  min-height: 30px;
+  padding: 2px;
+  font-size: 14px;
+  font-weight: 500;
+  padding-left: 7px;
+  padding-right: 7px;
+
+  separator {
+    min-width: 5px;
+  }
+
+  .workspace-container {
+    padding: 0;
+    color: $on_surface;
+
+    &:hover {
+      background:
+        $inverse_surface_transparent, $inverse_surface_transparent_overlay;
+    }
+    padding: 0 7px;
+    border-radius: $rounded-full;
+    margin-bottom: 2px;
+    margin-top: 2px;
+
+    .workspace-button {
+      min-width: 12px;
+      min-height: 12px;
+      transition: all 0.2s;
+      background-color: $inverse_surface_transparent_variant;
+      transition:
+        background-color 0.2s ease-in-out,
+        color 0.2s ease-in-out;
+
+      &:hover {
+        background-color: color.scale($primary, $alpha: -70%);
+        min-width: 1.2rem;
+        min-height: 1rem;
+      }
+
+      &.active {
+        min-width: 2.2rem;
+        min-height: 1rem;
+        background-color: $primary;
+      }
+
+      &.occupied {
+        box-shadow: unset;
+        background-color: color.scale($primary, $alpha: -20%);
+
+        &.active {
+          background-color: $primary;
+        }
+      }
+    }
+  }
+}
+
+.workspace-button-bg {
+  color: $on_surface;
+  // min-height: 20px;
+  border-radius: 30px;
+  padding: 0 5px;
+  // margin-top: 2px;
+  margin-bottom: 2px;
+}

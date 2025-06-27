@@ -1,0 +1,27 @@
+@use "sass:string";
+@use "sass:color";
+@use "../colors.scss" as *;
+@use "../common.scss" as *;
+
+.app-class-label {
+  color: #888;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 0px;
+}
+
+.app-title-label {
+  color: $on_surface;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 0px;
+}
+
+.focused-app-labels {
+  margin-left: 8px;
+  margin-right: 8px;
+  min-width: 80px;
+  margin-top: 6px;
+}

@@ -1,0 +1,21 @@
+@use "../colors.scss" as *;
+@use "sass:color";
+
+calendar {
+  &.view {
+    background-color: transparent;
+  }
+
+  &:selected {
+    background-color: transparent;
+    color: $primary;
+  }
+
+  &.highlight {
+    color: $primary;
+  }
+
+  &:indeterminate {
+    color: color.scale($on_surface, $alpha: -35%);
+  }
+}

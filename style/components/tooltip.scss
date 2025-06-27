@@ -1,0 +1,12 @@
+@use "../colors.scss" as *;
+
+tooltip {
+  background-color: $surface;
+  border: 1px solid $on_surface;
+  color: $on_surface;
+  margin-top: 0.5rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+}

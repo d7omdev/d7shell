@@ -1,0 +1,50 @@
+@use "../colors.scss" as *;
+@use "../common.scss" as *;
+
+popover {
+  background-color: $surface;
+  border: 1px solid $surface_variant;
+  border-radius: $rounded-lg;
+  color: $on_surface;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+popover.background.menu {
+  contents {
+    background-color: $surface_transparent;
+    color: $on_surface;
+    min-width: 120px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 4px 0;
+  }
+
+  button {
+    padding: 8px 12px;
+    margin: 1px 0;
+    border-radius: 6px;
+    background-color: transparent;
+    color: $on_surface;
+    border: none;
+    min-height: 20px;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $inverse_surface_transparent;
+    }
+
+    &:active {
+      background-color: $primary;
+      color: $on_primary;
+    }
+
+    &:last-child {
+      margin-bottom: 4px;
+    }
+  }
+
+  separator {
+    background-color: $outline;
+    margin: 4px 0;
+  }
+}

@@ -1,0 +1,177 @@
+@use "sass:color";
+@use "sass:math";
+@use "sass:list";
+@use "colors.scss" as *;
+@use "common.scss" as *;
+
+$window-border-radius: 6px 6px 6px 6px;
+
+.notifications-container {
+  border-radius: 13px 0 0 13px;
+  min-width: 400px;
+  min-height: 400px;
+  // padding: 10px 10px 0;
+  color: $on_surface;
+  padding: 12px;
+  background-color: $surface_transparent;
+
+  separator {
+    margin: 2px;
+    // background-color: $inverse_surface_transparent;
+    // color: $inverse_surface_transparent;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+  }
+  .scroll {
+    min-height: 300px;
+  }
+  .window-header {
+    margin-top: 6px;
+    // margin-bottom: 2px;
+    // color: $on_surface;
+    padding-bottom: 0;
+
+    .clear {
+      // padding: 0.1rem;
+      // padding-top: 0.2rem;
+      // padding-bottom: 0.3rem;
+      // padding: 1px;
+      padding-right: 0.8rem;
+      border-radius: 12px;
+      min-width: 10px;
+      min-height: 30px;
+      color: $on_surface;
+      // background: $inverse_surface_transparent;
+      &:hover {
+        color: $primary;
+        label {
+          color: $primary;
+        }
+      }
+      label {
+        font-size: 1.1rem;
+        color: $on_surface;
+      }
+    }
+
+    label {
+      margin-left: 1rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: $on_surface;
+    }
+  }
+
+  scrolledwindow viewport > box {
+    .not-found label {
+      font-size: 1rem;
+      color: $on_surface;
+    }
+
+    margin: 10px;
+    margin-top: 1px;
+  }
+
+  .notification-container {
+    min-width: 1px;
+    border-radius: 20px;
+    margin: 0px;
+    background: $inverse_surface_transparent;
+    box-shadow: none;
+  }
+}
+
+.notification-container {
+  background: $surface_transparent;
+  border: 1px solid $inverse_surface_transparent;
+  border-radius: $rounded-xl;
+  min-width: 320px;
+  padding: 10px;
+  color: $on_surface;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+
+  &.critical {
+    border: 2px solid $on_error;
+  }
+
+  .header {
+    font-size: 1rem;
+    color: $on_surface;
+
+    .app-icon {
+      margin-right: 0.1rem;
+      border-radius: 8px;
+      min-width: 32px;
+      min-height: 32px;
+    }
+    .app-name {
+      font-weight: 600;
+      color: $on_surface;
+      margin-right: 0;
+    }
+    .time {
+      color: $on_surface_variant;
+      font-size: 0.9em;
+      margin-left: 1rem;
+      margin-right: 0.3rem;
+    }
+    button image {
+      margin-left: 0.1rem;
+      padding: 3px;
+      border-radius: $rounded-full;
+      color: $on_surface;
+      &:hover {
+        background: $primary_fixed;
+        color: $on_primary_fixed;
+      }
+    }
+  }
+
+  .content {
+    margin-top: 0.5rem;
+
+    .image-file {
+      border-radius: $rounded-md;
+      min-width: 80px;
+      min-height: 80px;
+      background: $inverse_surface_transparent;
+    }
+    .summary {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: $on_surface;
+      margin-bottom: 0.2rem;
+    }
+    .body {
+      font-size: 0.95rem;
+      color: $on_surface_variant;
+      font-weight: 400;
+    }
+  }
+
+  .actions {
+    margin-top: 0.7rem;
+    button {
+      background: $inverse_surface_transparent;
+      color: $primary;
+      border-radius: $rounded-md;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.95rem;
+      &:hover {
+        background: $primary;
+        color: $on_primary;
+      }
+    }
+  }
+
+  separator {
+    background: $inverse_surface_transparent;
+  }
+}
+.slide-in {
+  animation: {
+    name: notification-slide-in;
+    duration: 0.3s;
+    timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+}

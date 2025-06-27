@@ -1,0 +1,32 @@
+@use "sass:string";
+@use "colors.scss" as *;
+@use "common.scss" as *;
+@use "sass:color";
+
+.osd-window {
+  background-color: $surface_transparent;
+  border-radius: $rounded-lg;
+  padding: 5px;
+}
+
+.osd-box {
+  color: $on_surface;
+  background-color: transparent;
+  margin: 0;
+}
+
+.osd-icon {
+  color: color.mix(black, $surface_transparent, 60%);
+  -gtk-icon-size: 1.8rem;
+  border-radius: 50%;
+  padding: 6px;
+}
+
+.osd-bar {
+  min-height: 16rem;
+  min-width: 2.5rem;
+  block,
+  trough {
+    border-radius: $rounded-sm;
+  }
+}

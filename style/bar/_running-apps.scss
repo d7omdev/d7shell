@@ -1,0 +1,24 @@
+@use "sass:string";
+@use "sass:color";
+@use "../colors.scss" as *;
+@use "../common.scss" as *;
+
+.active-apps-container {
+  padding-right: 0.75rem;
+  padding-left: 0.75rem;
+}
+
+.active-app {
+  background-color: $inverse_surface_transparent;
+  border-radius: $rounded-xl;
+  padding: 2px;
+}
+
+.inactive-app {
+  border-radius: $rounded-xl;
+  transition: background-color 0.2s ease-in-out;
+  padding: 2px;
+  &:hover {
+    background-color: $inverse_surface_transparent;
+  }
+}

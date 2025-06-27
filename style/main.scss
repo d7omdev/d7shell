@@ -1,0 +1,40 @@
+@use "colors.scss" as *;
+@use "./common.scss";
+@use "./Bar.scss";
+@use "./notification.scss";
+@use "./osd.scss";
+@use "./powermenu.scss";
+@use "./dashboard.scss";
+@use "./quicksettings.scss";
+@use "./wallpaperpicker.scss";
+@use "./applauncher.scss";
+@use "./mediaPlayer.scss";
+@use "roundedcorners.scss";
+@use "./components.scss";
+
+@mixin rounded-full {
+  border-radius: 9999px;
+}
+* {
+  font-family: Noto Sans;
+}
+
+.labelSmallBold {
+  color: $on_surface;
+  font-size: 14px;
+  font-weight: bold;
+}
+.labelSmallerBold {
+  color: $on_surface;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.labelSmall {
+  color: $on_surface;
+  font-size: 14px;
+}
+.labelSmaller {
+  color: $on_surface;
+  font-size: 12px;
+}
