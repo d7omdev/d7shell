@@ -77,12 +77,14 @@
 
 .powermenus-bg image {
   color: $on_surface;
+  color: $error;
   min-height: 20px;
   border-radius: $rounded-lg;
   margin-top: 2px;
   padding: 4px;
   -gtk-icon-size: 1.3rem;
   margin-bottom: 2px;
+  background: $inverse_surface_transparent;
 
   transition:
     background-color 0.2s ease-in-out,
@@ -97,8 +99,8 @@
   }
 
   &:hover {
-    color: $error;
-    background: $inverse_surface_transparent;
+    background-color: $error;
+    color: $on_error;
     padding: 4px;
   }
 

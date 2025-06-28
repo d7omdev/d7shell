@@ -105,7 +105,8 @@ function Layout({
       return (
         <centerbox>
           <Padding winName={name} />
-          <centerbox>
+          {/* @ts-ignore-next-line */}
+          <centerbox orientation={Gtk.Orientation.VERTICAL}>
             <Padding winName={name} />
             {child}
             <Padding winName={name} />
@@ -121,7 +122,6 @@ type PopupWindowProps = WindowProps & {
   name: string;
   visible?: boolean;
   layout?: string;
-  /* animation?: string; */ // Animation prop is currently unused
 };
 
 export default function PopupWindow({
@@ -129,7 +129,6 @@ export default function PopupWindow({
   name,
   visible,
   layout = "center",
-  /* animation, */ // Animation prop is currently unused
   ...props
 }: PopupWindowProps) {
   const { TOP, RIGHT, BOTTOM, LEFT } = Astal.WindowAnchor;

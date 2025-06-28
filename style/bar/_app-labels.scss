@@ -2,6 +2,7 @@
 @use "sass:color";
 @use "../colors.scss" as *;
 @use "../common.scss" as *;
+@use "../lib/mixins.scss" as *;
 
 .app-class-label {
   color: #888;
@@ -10,6 +11,7 @@
   text-transform: uppercase;
   font-weight: 600;
   margin-bottom: 0px;
+  @include titlefont;
 }
 
 .app-title-label {

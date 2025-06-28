@@ -78,7 +78,7 @@ export default () => {
       <revealer
         transitionType={Gtk.RevealerTransitionType.CROSSFADE}
         transitionDuration={300}
-        reveal_child={true}
+        reveal_child={clients.as((clientsList) => clientsList.length > 0)}
         child={
           <box
             spacing={4}
