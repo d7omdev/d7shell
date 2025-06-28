@@ -11,30 +11,10 @@
 @use "./mediaPlayer.scss";
 @use "roundedcorners.scss";
 @use "./components.scss";
+@use "./lib/mixins.scss" as *;
+@use "./lib/classes.scss";
+@use "./lib/paddings.scss";
 
-@mixin rounded-full {
-  border-radius: 9999px;
-}
 * {
-  font-family: Noto Sans;
-}
-
-.labelSmallBold {
-  color: $on_surface;
-  font-size: 14px;
-  font-weight: bold;
-}
-.labelSmallerBold {
-  color: $on_surface;
-  font-size: 10px;
-  font-weight: bold;
-}
-
-.labelSmall {
-  color: $on_surface;
-  font-size: 14px;
-}
-.labelSmaller {
-  color: $on_surface;
-  font-size: 12px;
+  @include readingfont;
 }

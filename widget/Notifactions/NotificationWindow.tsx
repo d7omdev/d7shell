@@ -69,6 +69,8 @@ function DNDButton() {
   return (
     <button
       tooltipText={"Do Not Disturb"}
+      halign={Gtk.Align.END}
+      valign={Gtk.Align.CENTER}
       onClicked={() => {
         notifd.set_dont_disturb(!notifd.get_dont_disturb());
       }}
@@ -86,14 +88,16 @@ function ClearButton() {
   return (
     <button
       cssClasses={["clear"]}
+      tooltipText={"Clear Notifications"}
+      halign={Gtk.Align.END}
+      valign={Gtk.Align.CENTER}
       onClicked={() => {
         notifd.notifications.forEach((n) => n.dismiss());
         App.toggle_window(WINDOW_NAME);
       }}
       sensitive={bind(notifd, "notifications").as((n) => n.length > 0)}
-    >
-      <image iconName={"user-trash-full-symbolic"} />
-    </button>
+      child={<image iconName={"user-trash-full-symbolic"} />}
+    />
   );
 }
 
@@ -110,18 +114,7 @@ function NotificationWindow(_gdkmonitor: Gdk.Monitor) {
     >
       <box cssClasses={["notifications-container"]} vertical vexpand={false}>
         <box cssClasses={["window-header"]}>
-          {/* <label label={"Notifications"} hexpand xalign={0} /> */}
-          <label
-            useMarkup={true}
-            label={"<b> Notifications</b>"}
-            hexpand
-            xalign={0}
-          />
-          {/* <image */}
-          {/*   iconName={"preferences-system-notifications-symbolic"} */}
-          {/*   hexpand */}
-          {/*   halign={Gtk.Align.START} */}
-          {/* /> */}
+          <label label={"Notifications"} hexpand xalign={0} />
           <DNDButton />
           <ClearButton />
         </box>

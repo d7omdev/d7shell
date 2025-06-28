@@ -45,3 +45,17 @@ window {
 label {
   box-shadow: none;
 }
+
+@mixin icon-material {
+  // Material Design Icons
+  font-family:
+    "Material Symbols Rounded", "MaterialSymbolsRounded",
+    "Material Symbols Outlined", "Material Symbols Sharp";
+}
+
+.icon-material {
+  @include icon-material;
+  font-size: 24px;
+  font-weight: 400;
+  color: $on_surface_variant;
+}
