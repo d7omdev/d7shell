@@ -130,6 +130,10 @@ export default function Notification({
                 />,
               ];
               if (n.body) {
+                const bodyText =
+                  n.body.length > 200
+                    ? n.body.substring(0, 200) + "..."
+                    : n.body;
                 textChildren.push(
                   <label
                     cssClasses={["body"]}
@@ -138,7 +142,7 @@ export default function Notification({
                     halign={Gtk.Align.START}
                     xalign={0}
                     justify={Gtk.Justification.FILL}
-                    label={n.body}
+                    label={bodyText}
                   />,
                 );
               }
@@ -152,7 +156,57 @@ export default function Notification({
           </box>,
         );
 
-        if (showActions && n.get_actions && n.get_actions().length > 0) {
+        const isHyprshot = n.appName === "Hyprshot";
+        const hasRegularActions =
+          showActions && n.get_actions && n.get_actions().length > 0;
+        const hasHyprshotActions =
+          isHyprshot && n.appIcon && fileExists(n.appIcon);
+
+        if (hasRegularActions || hasHyprshotActions) {
+          const actionButtons: JSX.Element[] = [];
+
+          if (hasHyprshotActions) {
+            actionButtons.push(
+              <button
+                hexpand={false}
+                onClicked={() => {
+                  GLib.spawn_command_line_async(`xdg-open "${n.appIcon}"`);
+                }}
+                label="Open Image"
+                halign={Gtk.Align.CENTER}
+                cssClasses={["action-button"]}
+              />,
+            );
+
+            actionButtons.push(
+              <button
+                hexpand={false}
+                onClicked={() => {
+                  GLib.spawn_command_line_async(`gradia "${n.appIcon}"`);
+                }}
+                label="Edit Image"
+                halign={Gtk.Align.CENTER}
+                cssClasses={["action-button"]}
+              />,
+            );
+          }
+
+          if (hasRegularActions) {
+            actionButtons.push(
+              ...n
+                .get_actions()
+                .map(({ label, id }) => (
+                  <button
+                    hexpand={false}
+                    onClicked={() => n.invoke(id)}
+                    label={label}
+                    halign={Gtk.Align.CENTER}
+                    cssClasses={["action-button"]}
+                  />
+                )),
+            );
+          }
+
           children.push(
             <revealer
               cssClasses={["actions-revealer"]}
@@ -165,16 +219,9 @@ export default function Notification({
                   spacing={8}
                   halign={Gtk.Align.CENTER}
                   valign={Gtk.Align.CENTER}
+                  hexpand
                 >
-                  {n.get_actions().map(({ label, id }) => (
-                    <button
-                      hexpand={false}
-                      onClicked={() => n.invoke(id)}
-                      label={label}
-                      halign={Gtk.Align.CENTER}
-                      cssClasses={["action-button"]}
-                    />
-                  ))}
+                  {actionButtons}
                 </box>
               }
             />,
@@ -186,7 +233,7 @@ export default function Notification({
             cssClasses={["notification-container", urgency(n)]}
             orientation={Gtk.Orientation.VERTICAL}
             setup={(self) => {
-              if (showActions && n.get_actions && n.get_actions().length > 0) {
+              if (hasRegularActions || hasHyprshotActions) {
                 const revealer = self.get_last_child() as Gtk.Revealer;
                 if (revealer && revealer instanceof Gtk.Revealer) {
                   (

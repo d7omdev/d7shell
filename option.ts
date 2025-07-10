@@ -34,7 +34,7 @@ const options = mkOptions(`${GLib.get_user_config_dir()}/d7shell/config.json`, {
       count: opt(5),
     },
     datetime: {
-      dateFormat: opt("%a • %m/%d"),
+      dateFormat: opt("%a  %m/%d"),
       timeFormat: opt("%I:%M %p"),
     },
   },

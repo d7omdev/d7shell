@@ -15,6 +15,7 @@ function WorkspaceButton({ ws, isDummy = false, ...props }: WsButtonProps) {
   const classNames = Variable.derive(
     [bind(hyprland, "focusedWorkspace"), bind(hyprland, "clients")],
     (fws) => {
+      if (!fws || !ws) return ["workspace-button"];
       const classes = ["workspace-button"];
 
       const active = fws.id == ws.id;

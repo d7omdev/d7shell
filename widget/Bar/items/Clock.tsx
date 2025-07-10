@@ -62,6 +62,7 @@ const checkPlayingStatus = () => {
     const playing = players.some(
       (player) => player.playbackStatus === AstalMpris.PlaybackStatus.PLAYING,
     );
+    time;
     isPlaying.set(playing);
     getCurrentTrack();
   } catch (error) {
@@ -97,13 +98,15 @@ export default function TimePanelButton() {
   return (
     <PanelButton
       window={WINDOW_NAME}
-      cssClasses={["panel-button", "dashboard-button"]}
+      cssClasses={["panel-button", "dashboard-button", "px-2"]}
       onClicked={() => App.toggle_window(WINDOW_NAME)}
       child={
         <box spacing={6}>
           <box
             onHoverEnter={() => isnotif.set(true)}
             onHoverLeave={() => isnotif.set(false)}
+            margin_start={2}
+            margin_end={2}
           >
             <revealer
               transitionDuration={300}
@@ -124,18 +127,44 @@ export default function TimePanelButton() {
               cssClasses={["circle"]}
               iconName={"message-notif-symbolic"}
             />
+            <revealer
+              transitionDuration={300}
+              transitionType={Gtk.RevealerTransitionType.SLIDE_LEFT}
+              reveal_child={bind(isnotif).as((is) => !is)}
+              halign={Gtk.Align.CENTER}
+              valign={Gtk.Align.CENTER}
+              margin_start={2}
+              child={
+                <label
+                  cssClasses={["label"]}
+                  marginStart={2}
+                  halign={Gtk.Align.CENTER}
+                  valign={Gtk.Align.CENTER}
+                  label={bind(notifd, "notifications").as((notifications) =>
+                    notifications.length > 0
+                      ? notifications.length.toString()
+                      : "",
+                  )}
+                />
+              }
+            />
           </box>
 
           <label
             label={time((t) => t.format(datetime.dateFormat.get())).as(
               (date) => date || "",
             )}
+            halign={Gtk.Align.CENTER}
+            valign={Gtk.Align.CENTER}
           />
+          <label label="•" />
           <label
             cssClasses={["time"]}
             label={time((t) => t.format(datetime.timeFormat.get())).as(
               (time) => time || "",
             )}
+            halign={Gtk.Align.CENTER}
+            valign={Gtk.Align.CENTER}
           />
 
           <box

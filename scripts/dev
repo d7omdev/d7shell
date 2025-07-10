@@ -17,7 +17,7 @@ cleanup() {
 trap cleanup SIGINT SIGTERM
 
 # Start AGS initially
-ags run . --gtk4 &
+ags run . -g 4 &
 pid=$!
 
 # Watch for TS/TSX changes and restart AGS
@@ -27,7 +27,7 @@ while true; do
         kill $pid 2>/dev/null || true
         wait $pid 2>/dev/null || true
         echo '🔄 Restarting AGS...'
-        ags run . --gtk4 &
+        ags run . -g 4 &
         pid=\$!
       "
 done

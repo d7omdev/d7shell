@@ -15,7 +15,7 @@ function forMonitor(
   windows: Array<(monitor: Gdk.Monitor) => unknown>,
 ) {
   const monitors = App.get_monitors();
-  const monitor = monitors[index];
+  const monitor = monitors[index] ? monitors[index] : monitors[0];
   if (monitor) {
     windows.forEach((win) => win(monitor));
   }

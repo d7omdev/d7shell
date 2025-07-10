@@ -105,6 +105,13 @@
   background: $surface_transparent;
   color: $on_surface;
 
+  .powermenu-title {
+    font-size: 20px;
+    color: $on_surface;
+    font-weight: 500;
+    margin-top: 10px;
+  }
+
   flowboxchild {
     outline: unset;
     padding: 0;
@@ -143,4 +150,10 @@
     // padding: 0.7rem;
     border-radius: 100px;
   }
+}
+
+.hovered {
+  background-color: red;
+  color: $on_primary;
+  transition: background-color 0.2s ease-in-out;
 }

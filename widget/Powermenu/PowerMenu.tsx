@@ -1,9 +1,8 @@
-import { Astal, Gtk, Gdk } from "astal/gtk4";
-import Powermenu from "../../lib/powermenu";
-import PopupWindow from "../../common/PopupWindow";
-import { FlowBox } from "../../common/FlowBox";
 import { timeout, Variable } from "astal";
-import { bind } from "astal";
+import { Astal, Gdk, Gtk } from "astal/gtk4";
+import { FlowBox } from "../../common/FlowBox";
+import PopupWindow from "../../common/PopupWindow";
+import Powermenu from "../../lib/powermenu";
 
 const powermenu = Powermenu.get_default();
 export const WINDOW_NAME = "powermenu";
@@ -17,9 +16,10 @@ const icons = {
 };
 
 type Action = keyof typeof icons;
+const showTitle = Variable(false);
+const Label = Variable("");
 
 function SysButton({ action, label }: { action: Action; label: string }) {
-  const showTitle = Variable(false);
   return (
     <button
       cssClasses={["system-button"]}
@@ -30,24 +30,22 @@ function SysButton({ action, label }: { action: Action; label: string }) {
           spacing={12}
           halign={Gtk.Align.CENTER}
           valign={Gtk.Align.CENTER}
-          onHoverEnter={() => showTitle.set(true)}
-          onHoverLeave={() => timeout(250, () => showTitle.set(false))}
-        >
-          <image
-            iconName={icons[action]}
-            iconSize={Gtk.IconSize.LARGE}
-            valign={Gtk.Align.CENTER}
-            halign={Gtk.Align.CENTER}
-            marginTop={12}
-          />
-          <revealer
-            transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
-            valign={Gtk.Align.END}
-            halign={Gtk.Align.CENTER}
-            reveal_child={bind(showTitle)}
-            child={<label label={label} />}
-          />
-        </box>
+          onHoverEnter={() => {
+            showTitle.set(true);
+            Label.set(label);
+          }}
+          onHoverLeave={() => {
+            timeout(250, () => showTitle.set(false));
+          }}
+          child={
+            <image
+              iconName={icons[action]}
+              iconSize={Gtk.IconSize.LARGE}
+              valign={Gtk.Align.CENTER}
+              halign={Gtk.Align.CENTER}
+            />
+          }
+        />
       }
     />
   );
@@ -61,24 +59,37 @@ export default function PowerMenu(_gdkmonitor: Gdk.Monitor) {
       layout="center"
       child={
         <box
+          vertical
           child={
-            // @ts-ignore
-            <FlowBox
-              cssClasses={["powermenu-container"]}
-              rowSpacing={6}
-              columnSpacing={6}
-              maxChildrenPerLine={4}
-              setup={(self) => {
-                self.connect("child-activated", (_, child) => {
-                  child.get_child()?.activate();
-                });
-              }}
-            >
-              <SysButton action={"sleep"} label={"Sleep"} />
-              <SysButton action={"logout"} label={"Log Out"} />
-              <SysButton action={"reboot"} label={"Reboot"} />
-              <SysButton action={"shutdown"} label={"Shutdown"} />
-            </FlowBox>
+            <>
+              {/*  @ts-ignore */}
+              <FlowBox
+                cssClasses={["powermenu-container"]}
+                rowSpacing={6}
+                columnSpacing={6}
+                maxChildrenPerLine={4}
+                margin_bottom={20}
+                setup={(self) => {
+                  self.connect("child-activated", (_, child) => {
+                    child.get_child()?.activate();
+                  });
+                }}
+              >
+                <SysButton action={"sleep"} label={"Sleep"} />
+                <SysButton action={"logout"} label={"Log Out"} />
+                <SysButton action={"reboot"} label={"Reboot"} />
+                <SysButton action={"shutdown"} label={"Shutdown"} />
+              </FlowBox>
+              {/* <revealer */}
+              {/*   transitionType={Gtk.RevealerTransitionType.SLIDE_UP} */}
+              {/*   cssClasses={["powermenu-title"]} */}
+              {/*   valign={Gtk.Align.END} */}
+              {/*   halign={Gtk.Align.CENTER} */}
+              {/*   reveal_child={bind(showTitle)} */}
+              {/*   visible={bind(showTitle)} */}
+              {/*   child={<label label={bind(Label)} />} */}
+              {/* /> */}
+            </>
           }
         />
       }

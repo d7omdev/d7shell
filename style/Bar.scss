@@ -7,3 +7,8 @@
 @use "bar/modules";
 @use "bar/running-apps";
 @use "bar/app-labels";
+
+.time {
+  font-size: 1.3rem;
+  margin-top: -2px;
+}

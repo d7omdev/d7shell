@@ -84,7 +84,7 @@ async function initializeLocation() {
   } else {
     currentLocation.set(null);
     locationError.set("Failed to detect location from IP address");
-    console.error("❌ Location error: Could not detect your location");
+    // console.error("❌ Location error: Could not detect your location");
   }
 }
 

@@ -17,7 +17,7 @@
     "format": "bun x prettier --write .",
     "check-format": "bun x prettier --check .",
     "lint": "bun x eslint . --ext .ts,.js",
-    "run": "ags run app.ts --gtk4",
+    "run": "ags run app.ts -g 4",
     "dev": "bash -c ./scripts/dev"
   }
 }

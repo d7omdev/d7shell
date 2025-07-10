@@ -54,42 +54,44 @@ export default function NotifPanelButton() {
       onClicked={() => {
         App.toggle_window(WINDOW_NAME);
       }}
-    >
-      {bind(notifd, "dontDisturb").as((dnd) =>
+      child={bind(notifd, "dontDisturb").as((dnd) =>
         !dnd ? (
-          <box spacing={6}>
-            {bind(notifd, "notifications").as((n) => {
+          <box
+            spacing={6}
+            child={bind(notifd, "notifications").as((n) => {
               if (n.length > 0) {
-                return [
-                  ...n.slice(0, 3).map((e) => {
-                    const getFallback = (appName: string) => {
-                      const getApp = apps.fuzzy_query(appName);
-                      if (getApp.length != 0) {
-                        return getApp[0].get_icon_name();
-                      }
-                      return "unknown";
-                    };
-                    const fallback =
-                      e.app_icon.trim() === ""
-                        ? getFallback(e.app_name)
-                        : e.app_icon;
-                    const icon = substitute[e.app_name] ?? fallback;
-                    return <image iconName={icon} />;
-                  }),
-                  <label
-                    visible={n.length > 3}
-                    cssClasses={["circle"]}
-                    label={""}
-                  />,
-                ];
+                return (
+                  <>
+                    {n.slice(0, 3).map((e) => {
+                      const getFallback = (appName: string) => {
+                        const getApp = apps.fuzzy_query(appName);
+                        if (getApp.length != 0) {
+                          return getApp[0].get_icon_name();
+                        }
+                        return "unknown";
+                      };
+                      const fallback =
+                        e.app_icon.trim() === ""
+                          ? getFallback(e.app_name)
+                          : e.app_icon;
+                      const icon = substitute[e.app_name] ?? fallback;
+                      return <image iconName={icon} />;
+                    })}
+                    <label
+                      visible={n.length > 3}
+                      cssClasses={["circle"]}
+                      label={""}
+                    />
+                  </>
+                );
               }
               return <NotifIcon />;
             })}
-          </box>
+          />
         ) : (
           <NotifIcon />
         ),
       )}
-    </PanelButton>
+    />
   );
 }

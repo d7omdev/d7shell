@@ -14,72 +14,64 @@
   @return $string;
 }
 
-// Tailwind-like spacing scale
+// Tailwind-like spacing
 $spacing-scale: (
-  0: 0rem,
-  0.5: 0.125rem,
-  1: 0.25rem,
-  1.5: 0.375rem,
-  2: 0.5rem,
-  2.5: 0.625rem,
-  3: 0.75rem,
-  3.5: 0.875rem,
-  4: 1rem,
-  5: 1.25rem,
-  6: 1.5rem,
-  7: 1.75rem,
-  8: 2rem,
-  9: 2.25rem,
-  10: 2.5rem,
-  11: 2.75rem,
-  12: 3rem,
-  14: 3.5rem,
-  16: 4rem,
-  20: 5rem,
-  24: 6rem,
-  28: 7rem,
-  32: 8rem,
-  36: 9rem,
-  40: 10rem,
-  44: 11rem,
-  48: 12rem,
-  52: 13rem,
-  56: 14rem,
-  60: 15rem,
-  64: 16rem,
+  "0": 0px,
+  "0_5": 2px,
+  "1": 4px,
+  "1_5": 6px,
+  "2": 8px,
+  "2_5": 10px,
+  "3": 12px,
+  "3_5": 14px,
+  "4": 16px,
+  "5": 20px,
+  "6": 24px,
+  "7": 28px,
+  "8": 32px,
+  "9": 36px,
+  "10": 40px,
+  "11": 44px,
+  "12": 48px,
+  "14": 56px,
+  "16": 64px,
+  "20": 80px,
+  "24": 96px,
+  "28": 112px,
+  "32": 128px,
+  "36": 144px,
+  "40": 160px,
+  "44": 176px,
+  "48": 192px,
+  "52": 208px,
+  "56": 224px,
+  "60": 240px,
+  "64": 256px,
 );
 
 // Generate padding utility classes
 @each $key, $value in $spacing-scale {
-  $safe-key: str-replace("#{$key}", ".", "_");
-
-  .p-#{$safe-key} {
-    padding: $value;
+  .p-#{$key} {
+    padding: $value !important;
   }
-
-  .pt-#{$safe-key} {
-    padding-top: $value;
+  .pt-#{$key} {
+    padding-top: $value !important;
   }
-
-  .pr-#{$safe-key} {
-    padding-right: $value;
+  .pr-#{$key} {
+    padding-right: $value !important;
   }
-
-  .pb-#{$safe-key} {
-    padding-bottom: $value;
+  .pb-#{$key} {
+    padding-bottom: $value !important;
   }
-
-  .pl-#{$safe-key} {
-    padding-left: $value;
+  .pl-#{$key} {
+    padding-left: $value !important;
   }
-
-  .px-#{$safe-key} {
-    padding-left: $value;
-    padding-right: $value;
+  .px-#{$key} {
+    padding-left: $value !important;
+    padding-right: $value !important;
   }
-
-  .py-#{$safe-key} {
-    padding-top: $value;
-    padding-bottom: $value;
+  .py-#{$key} {
+    padding-top: $value !important;
+    padding-bottom: $value !important;
   }
 }

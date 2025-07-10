@@ -52,11 +52,41 @@ class NotificationMap implements Subscribable {
           : undefined,
       });
 
+      let timeoutHandle: ReturnType<typeof timeout> | null = null;
+      let isHovered = false;
+
+      const startTimeout = () => {
+        if (timeoutHandle) {
+          timeoutHandle.cancel();
+        }
+        timeoutHandle = timeout(TIMEOUT_DELAY, () => {
+          if (!isHovered) {
+            this.delete(id);
+          }
+        });
+      };
+
       this.set(
         id,
         Notification({
           n: notification!,
-          setup: () => timeout(TIMEOUT_DELAY, () => this.delete(id)),
+          setup: () => startTimeout(),
+          onHover: () => {
+            isHovered = true;
+            if (timeoutHandle) {
+              timeoutHandle.cancel();
+              timeoutHandle = null;
+            }
+          },
+          onHoverLost: () => {
+            isHovered = false;
+            // Start timeout with delay after hover lost
+            timeoutHandle = timeout(1000, () => {
+              if (!isHovered) {
+                this.delete(id);
+              }
+            });
+          },
         }),
       );
     });

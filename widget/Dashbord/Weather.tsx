@@ -78,19 +78,23 @@ export function WeatherPanel() {
               />,
             ]
           : [
-              <box vertical spacing={4} halign={Gtk.Align.CENTER}>
+              <box
+                vertical
+                spacing={4}
+                hexpand
+                halign={Gtk.Align.CENTER}
+                valign={Gtk.Align.CENTER}
+              >
                 <image
                   iconName="weather-showers-scattered-symbolic"
-                  pixelSize={24}
+                  pixelSize={32}
                   cssClasses={["error-icon"]}
                 />
                 <label
-                  label={bind(locationError).as((locError) =>
-                    locError
-                      ? `Location Error: ${locError}`
-                      : "Detecting location...",
-                  )}
                   halign={Gtk.Align.CENTER}
+                  label={bind(locationError).as((locError) =>
+                    locError ? ` ${locError}` : "Detecting location...",
+                  )}
                   cssClasses={["error-text"]}
                 />
               </box>,

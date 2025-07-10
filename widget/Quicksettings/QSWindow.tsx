@@ -1,32 +1,25 @@
-import PopupWindow from "../../common/PopupWindow";
-import { execAsync } from "astal";
-import { notifySend } from "../../lib/utils";
-import DarkModeQS from "./buttons/DarkModeQS";
-import ScreenRecord from "../../lib/screenrecord";
-import { timeout } from "astal";
-import ColorPickerQS from "./buttons/ColorPickerQS";
-import ScreenshotQS from "./buttons/ScreenshotQS";
-import DontDisturbQS from "./buttons/DontDisturbQS";
-import RecordQS from "./buttons/RecordQS";
-import MicQS from "./buttons/MicQS";
-import BrightnessBox from "./BrightnessBox";
-import MediaPlayers from "./MediaPlayer";
-import VolumeBox from "./VolumeBox";
-import { FlowBox } from "../../common/FlowBox";
-import { Gtk, App, Gdk } from "astal/gtk4";
-import { bash } from "../../lib/utils";
-import { WINDOW_NAME as POWERMENU_WINDOW } from "../Powermenu/PowerMenu";
-import { bind, Binding, GObject, Variable } from "astal";
-import options from "../../option";
+import { bind, Binding, execAsync, GObject, timeout, Variable } from "astal";
+import { App, Astal, Gdk, Gtk } from "astal/gtk4";
 import AstalBattery from "gi://AstalBattery";
-import { toggleWallpaperPicker } from "../Wallpaperpicker/WallpaperPicker";
-import AstalNetwork from "gi://AstalNetwork";
 import AstalBluetooth from "gi://AstalBluetooth";
+import AstalNetwork from "gi://AstalNetwork";
+import { FlowBox } from "../../common/FlowBox";
+import PopupWindow from "../../common/PopupWindow";
+import ScreenRecord from "../../lib/screenrecord";
+import { bash, notifySend } from "../../lib/utils";
+import options from "../../option";
+import { toggleWallpaperPicker } from "../Wallpaperpicker/WallpaperPicker";
+import BrightnessBox from "./BrightnessBox";
+import DarkModeQS from "./buttons/DarkModeQS";
+import DontDisturbQS from "./buttons/DontDisturbQS";
+import MicQS from "./buttons/MicQS";
+import RecordQS from "./buttons/RecordQS";
+import MediaPlayers from "./MediaPlayer";
 import BatteryPage from "./pages/BatteryPage";
+import BluetoothPage from "./pages/BluetoothPage";
 import SpeakerPage from "./pages/SpeakerPage";
 import WifiPage from "./pages/WifiPage";
-import BluetoothPage from "./pages/BluetoothPage";
-import Cava from "./Cava";
+import VolumeBox from "./VolumeBox";
 
 export const WINDOW_NAME = "quicksettings";
 export const qsPage = Variable("main");
@@ -45,6 +38,7 @@ const layout = Variable.derive(
 
 function QSButtons() {
   return (
+    // @ts-ignore
     <FlowBox
       maxChildrenPerLine={2}
       activateOnSingleClick={false}
@@ -63,6 +57,7 @@ function QSButtons() {
 }
 function QSButtons_child() {
   return (
+    // @ts-ignore
     <FlowBox
       maxChildrenPerLine={2}
       activateOnSingleClick={false}
@@ -187,25 +182,28 @@ function ArrowButton<T extends GObject.Object>({
         return classes;
       })}
     >
-      <button onClicked={onClicked}>
-        <box halign={Gtk.Align.START} hexpand>
-          <image iconName={icon} iconSize={Gtk.IconSize.LARGE} />
-          <box vertical>
-            <label
-              xalign={0}
-              label={title}
-              cssClasses={["title"]}
-              maxWidthChars={8}
-            />
-            <label
-              xalign={0}
-              label={subtitle}
-              cssClasses={["subtitle"]}
-              maxWidthChars={8}
-            />
+      <button
+        onClicked={onClicked}
+        child={
+          <box halign={Gtk.Align.START} hexpand>
+            <image iconName={icon} iconSize={Gtk.IconSize.LARGE} />
+            <box vertical>
+              <label
+                xalign={0}
+                label={title}
+                cssClasses={["title"]}
+                maxWidthChars={8}
+              />
+              <label
+                xalign={0}
+                label={subtitle}
+                cssClasses={["subtitle"]}
+                maxWidthChars={8}
+              />
+            </box>
           </box>
-        </box>
-      </button>
+        }
+      />
       <button
         iconName={"go-next-symbolic"}
         cssClasses={["next-page"]}
@@ -304,32 +302,33 @@ function QSWindow(_gdkmonitor: Gdk.Monitor) {
   return (
     <PopupWindow
       name={WINDOW_NAME}
-      // layer={Astal.Layer.BOTTOM}
-      //animation="slide right"
-      // exclusivity={Astal.Exclusivity.EXCLUSIVE}
+      exclusivity={Astal.Exclusivity.EXCLUSIVE}
       layout="top_right"
       margin={10}
       onDestroy={() => layout.drop()}
-    >
-      <box
-        cssClasses={["qs-container"]}
-        hexpand={false}
-        vexpand={false}
-        vertical
-      >
-        <stack
-          visibleChildName={qsPage()}
-          transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
-          transitionDuration={300}
-        >
-          <MainPage />
-          <BatteryPage />
-          <SpeakerPage />
-          <WifiPage />
-          <BluetoothPage />
-        </stack>
-      </box>
-    </PopupWindow>
+      child={
+        <box
+          cssClasses={["qs-container"]}
+          hexpand={false}
+          vexpand={false}
+          vertical
+          child={
+            // @ts-ignore it has children
+            <stack
+              visibleChildName={qsPage()}
+              transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
+              transitionDuration={300}
+            >
+              <MainPage />
+              <BatteryPage />
+              <SpeakerPage />
+              <WifiPage />
+              <BluetoothPage />
+            </stack>
+          }
+        />
+      }
+    />
   );
 }
 

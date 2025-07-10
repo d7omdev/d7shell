@@ -1,5 +1,8 @@
 @use "colors.scss" as *;
 @use "./common.scss";
+@use "./lib/mixins.scss" as *;
+@use "./lib/classes.scss";
+@use "./lib/paddings.scss";
 @use "./Bar.scss";
 @use "./notification.scss";
 @use "./osd.scss";
@@ -11,9 +14,6 @@
 @use "./mediaPlayer.scss";
 @use "roundedcorners.scss";
 @use "./components.scss";
-@use "./lib/mixins.scss" as *;
-@use "./lib/classes.scss";
-@use "./lib/paddings.scss";
 
 * {
   @include readingfont;

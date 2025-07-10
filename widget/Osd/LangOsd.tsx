@@ -13,7 +13,7 @@ const hyprland = AstalHyprland.get_default();
 function LangOsd() {
   return (
     <box
-      cssClasses={["px-10", "py-1", "pb-2", "osd-lang"]}
+      cssClasses={["osd-lang"]}
       orientation={Gtk.Orientation.VERTICAL}
       spacing={2}
     >

@@ -1,16 +1,16 @@
 @use "sass:color";
 @use "colors.scss" as *;
+@use "common.scss" as *;
 
 .qs-container {
   min-width: 420px;
-  // min-height: 650px;
   background: $surface_transparent;
-  border-radius: 30px;
+  border-radius: $rounded-3xl;
   padding: 5px;
+  // border: $inverse_surface 0.3px solid;
 
   button {
     outline-color: $on_surface;
-    // color: $on_surface;
   }
 
   .arrow-button {
