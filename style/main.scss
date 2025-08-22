@@ -18,3 +18,31 @@
 * {
   @include readingfont;
 }
+
+scale {
+  * {
+    @include rounded-full;
+  }
+
+  $width: 0.25em;
+
+  trough {
+    min-height: $width;
+    min-width: $width;
+    background-color: $inverse_surface_transparent;
+
+    highlight,
+    progress {
+      background-color: $primary;
+      min-height: $width;
+      min-width: $width;
+    }
+  }
+
+  slider {
+    background-color: $on_surface;
+    min-height: $width;
+    min-width: $width;
+    margin: -0.6em;
+  }
+}

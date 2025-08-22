@@ -97,7 +97,12 @@ export default function WorkspacesPanelButton() {
   );
 
   return (
-    <box cssClasses={["workspace-container"]} spacing={4}>
+    <box
+      cssClasses={["workspace-container"]}
+      spacing={4}
+      marginTop={1}
+      marginBottom={3}
+    >
       {bind(workspaceList).as((workspaces) =>
         workspaces.map(({ ws, isDummy }) => (
           <WorkspaceButton ws={ws} isDummy={isDummy} />

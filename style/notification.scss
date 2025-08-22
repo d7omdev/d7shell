@@ -3,17 +3,22 @@
 @use "sass:list";
 @use "colors.scss" as *;
 @use "common.scss" as *;
+@use "./lib/mixins.scss" as *;
 
 $window-border-radius: 6px 6px 6px 6px;
 
 .notifications-container {
-  border-radius: 13px 0 0 13px;
+  border-radius: $rounded-xl;
   min-width: 400px;
   min-height: 400px;
   // padding: 10px 10px 0;
   color: $on_surface;
   padding: 12px;
   background-color: $surface_transparent;
+
+  i {
+    @include readingfont;
+  }
 
   separator {
     margin: 2px;
@@ -74,10 +79,14 @@ $window-border-radius: 6px 6px 6px 6px;
 
   .notification-container {
     min-width: 1px;
-    border-radius: 20px;
+    border-radius: $rounded-xl;
     margin: 0px;
     background: $inverse_surface_transparent;
     box-shadow: none;
+
+    i {
+      @include readingfont;
+    }
   }
 }
 
@@ -89,6 +98,10 @@ $window-border-radius: 6px 6px 6px 6px;
   padding: 10px;
   color: $on_surface;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+
+  i {
+    @include readingfont;
+  }
 
   &.critical {
     border: 2px solid $on_error;

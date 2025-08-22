@@ -3,6 +3,7 @@ import { bind } from "astal";
 import { Gtk } from "astal/gtk4";
 import AstalMpris from "gi://AstalMpris";
 import Pango from "gi://Pango";
+import MaterialIcon from "../../common/MaterialIcon";
 
 function MediaPlayer({ player }: { player: AstalMpris.Player }) {
   if (!player) {
@@ -110,17 +111,30 @@ function MediaPlayer({ player }: { player: AstalMpris.Player }) {
                 ))}
               />
 
-              <box hexpand halign={Gtk.Align.CENTER} spacing={8}>
+              <box hexpand halign={Gtk.Align.CENTER} spacing={4}>
+                <button
+                  valign={Gtk.Align.CENTER}
+                  onClicked={() => player.loop()}
+                  child={bind(player, "loopStatus").as((status) => (
+                    <MaterialIcon
+                      iconName={
+                        status === AstalMpris.Loop.PLAYLIST
+                          ? "repeat_on"
+                          : status === AstalMpris.Loop.TRACK
+                            ? "repeat_one_on"
+                            : "repeat"
+                      }
+                      size="norm"
+                    />
+                  ))}
+                />
                 <button
                   valign={Gtk.Align.CENTER}
                   onClicked={() => player.previous()}
                   visible={bind(player, "canGoPrevious")}
                   cssClasses={["next-icon"]}
                   child={
-                    <image
-                      iconName="media-seek-backward-symbolic"
-                      pixelSize={22}
-                    />
+                    <MaterialIcon iconName="arrow_back_ios" size="small" />
                   }
                 />
                 <button
@@ -136,11 +150,22 @@ function MediaPlayer({ player }: { player: AstalMpris.Player }) {
                   visible={bind(player, "canGoNext")}
                   cssClasses={["next-icon"]}
                   child={
-                    <image
-                      iconName="media-seek-forward-symbolic"
-                      pixelSize={22}
-                    />
+                    <MaterialIcon iconName="arrow_forward_ios" size="small" />
                   }
+                />
+                <button
+                  valign={Gtk.Align.CENTER}
+                  onClicked={() => player.shuffle()}
+                  child={bind(player, "shuffleStatus").as((status) => (
+                    <MaterialIcon
+                      iconName={
+                        status === AstalMpris.Shuffle.ON
+                          ? "shuffle_on"
+                          : "shuffle"
+                      }
+                      size="norm"
+                    />
+                  ))}
                 />
               </box>
 

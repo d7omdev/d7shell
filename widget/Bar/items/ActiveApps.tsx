@@ -73,6 +73,10 @@ export default () => {
   const focusedWorkspace = bind(hypr, "focusedWorkspace");
   const clients = bind(hypr, "clients");
 
+  const sortedClients = clients.as((clients) =>
+    clients.sort((a, b) => a.workspace.id - b.workspace.id),
+  );
+
   return (
     <box orientation={Gtk.Orientation.HORIZONTAL} spacing={4}>
       <revealer
@@ -82,11 +86,11 @@ export default () => {
         child={
           <box
             spacing={4}
-            margin_top={2}
-            margin_bottom={2}
+            margin_top={1}
+            margin_bottom={5}
             cssClasses={["bar_module", "on", "active-apps-container"]}
           >
-            {clients.as((clientsList) => {
+            {sortedClients.as((clientsList) => {
               return clientsList.map((client) => {
                 const clientClassBinding = bind(client, "class");
                 const tooltipBinding = bind(client, "class").as(
@@ -106,18 +110,32 @@ export default () => {
                       }
                     }}
                     child={
-                      <image
-                        margin_top={5}
-                        margin_bottom={5}
-                        tooltip_text={tooltipBinding}
-                        cssClasses={focused.as((focusedClient) => {
-                          const isActive = focusedClient?.pid === client.pid;
-                          return isActive ? ["active-app"] : ["inactive-app"];
-                        })}
-                        iconName={clientClassBinding.as((name) =>
-                          lookUpIcon(name),
-                        )}
-                        pixelSize={20}
+                      <box
+                        children={[
+                          <image
+                            margin_top={4}
+                            margin_bottom={4}
+                            tooltip_text={tooltipBinding}
+                            cssClasses={focused.as((focusedClient) => {
+                              const isActive =
+                                focusedClient?.pid === client.pid;
+                              return isActive
+                                ? ["active-app"]
+                                : ["inactive-app"];
+                            })}
+                            iconName={clientClassBinding.as((name) =>
+                              lookUpIcon(name),
+                            )}
+                            pixelSize={18}
+                          />,
+                          <overlay>
+                            <label
+                              label={client.workspace.id.toString()}
+                              cssClasses={["workspace_num"]}
+                              type="overlay"
+                            />
+                          </overlay>,
+                        ]}
                       />
                     }
                   />
@@ -128,6 +146,7 @@ export default () => {
         }
       />
       <box
+        marginTop={-2}
         child={focusedWorkspace.as((workspace) => {
           return workspace && workspace.get_clients().length > 0 ? (
             <FocusedAppLabels

@@ -14,6 +14,7 @@ export default function PanelButton({
 }: PanelButtonProps) {
   return (
     <button
+      marginBottom={4.5}
       cssClasses={["panel-button"]}
       setup={(self) => {
         if (window) {
@@ -42,8 +43,7 @@ export default function PanelButton({
         if (setup) setup(self);
       }}
       {...props}
-    >
-      {child}
-    </button>
+      child={child}
+    />
   );
 }

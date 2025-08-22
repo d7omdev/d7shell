@@ -5,6 +5,7 @@ import Notification from "./Notification";
 import { type Subscribable } from "astal/binding";
 import { Variable, bind, timeout } from "astal";
 import Hyprland from "gi://AstalHyprland";
+import AstalNotifd from "gi://AstalNotifd?version=0.1";
 
 const TIMEOUT_DELAY = 5_000;
 
@@ -51,6 +52,7 @@ class NotificationMap implements Subscribable {
             })
           : undefined,
       });
+      if (notifd.dontDisturb) return;
 
       let timeoutHandle: ReturnType<typeof timeout> | null = null;
       let isHovered = false;
@@ -78,6 +80,7 @@ class NotificationMap implements Subscribable {
               timeoutHandle = null;
             }
           },
+
           onHoverLost: () => {
             isHovered = false;
             // Start timeout with delay after hover lost
@@ -149,6 +152,7 @@ export default function NotificationPopups(
 ): Astal.Window {
   const notifs = new NotificationMap();
   const { TOP, RIGHT } = Astal.WindowAnchor;
+  const notifd = AstalNotifd.get_default();
 
   return (
     <window

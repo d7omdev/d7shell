@@ -107,7 +107,7 @@ function Bar({ gdkmonitor, ...props }: BarProps) {
       {...props}
       child={
         // @ts-expect-error It has cssClasses prop
-        <centerbox cssClasses={["bar-container"]}>
+        <centerbox cssClasses={["bar-container", "rounded-2xl"]}>
           <Start />
           <Center />
           <End />

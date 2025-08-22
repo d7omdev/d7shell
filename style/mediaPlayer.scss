@@ -1,4 +1,5 @@
 @use "colors.scss" as *;
+@use "./lib/mixins.scss" as *;
 
 .mediaPlayersContainer {
   // margin: 6px;
@@ -37,21 +38,30 @@
         // margin-left: 0.3rem;
         margin-right: 0.3rem;
         scale {
+          * {
+            @include rounded-full;
+          }
+
+          $width: 0.25em;
+
           trough {
-            border-radius: 9999px;
-            min-height: 0.25em;
-            // min-height: 10px;
+            min-height: $width;
+            min-width: $width;
+            background-color: $inverse_surface_transparent;
 
             highlight,
             progress {
               background-color: $primary;
-              min-height: 0.25em;
+              min-height: $width;
+              min-width: $width;
             }
           }
+
           slider {
-            background-color: $primary;
-            min-height: 0.25em;
-            margin-left: 1rem !important;
+            background-color: $on_surface;
+            min-height: $width;
+            min-width: $width;
+            margin: -0.5em;
           }
         }
       }
@@ -89,4 +99,16 @@
       // margin-right: 0.3rem;
     }
   }
+}
+
+.shuffle-active {
+  background-color: $background;
+  @include rounded-full;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.shuffle-inactive {
+  padding-left: 2px;
+  padding-right: 2px;
 }
