@@ -146,7 +146,7 @@ export default () => {
         }
       />
       <box
-        marginTop={-2}
+        marginBottom={2}
         child={focusedWorkspace.as((workspace) => {
           return workspace && workspace.get_clients().length > 0 ? (
             <FocusedAppLabels

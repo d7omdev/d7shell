@@ -20,6 +20,7 @@ import BluetoothPage from "./pages/BluetoothPage";
 import SpeakerPage from "./pages/SpeakerPage";
 import WifiPage from "./pages/WifiPage";
 import VolumeBox from "./VolumeBox";
+import ToggleWarm from "./buttons/ToggleWarm";
 
 export const WINDOW_NAME = "quicksettings";
 export const qsPage = Variable("main");
@@ -51,6 +52,7 @@ function QSButtons() {
       {/* <ScreenshotQS /> */}
       <MicQS />
       <DontDisturbQS />
+      <ToggleWarm />
       {/* <RecordQS /> */}
     </FlowBox>
   );

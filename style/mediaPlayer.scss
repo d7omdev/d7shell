@@ -7,7 +7,7 @@
   // margin-bottom: 6px;
   background-color: $inverse_surface_transparent;
   border-radius: 20px;
-  min-height: 50px;
+  min-height: 90px;
   .media-player {
     // min-width: 180px;
     color: $on_surface;
@@ -28,7 +28,7 @@
     }
 
     .progress_container {
-      min-height: 10px;
+      min-height: 15px;
       // margin-left: 1rem;
 
       .progress {

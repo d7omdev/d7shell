@@ -8,13 +8,12 @@ export default function TrayPanelButton() {
   const createTrayItemButton = (item: AstalTray.TrayItem) => {
     return (
       <menubutton
+        cssClasses={["tray-item-button", "button"]} // ensure it inherits button style
         setup={(self) => {
-          if (!item.menuModel) {
-            console.warn("Tray item missing menuModel:", item);
-            return;
-          }
+          if (!item.menuModel) return;
 
           const popoverMenu = Gtk.PopoverMenu.new_from_model(item.menuModel);
+          popoverMenu.add_css_class("tray-menu");
 
           if (item.actionGroup) {
             popoverMenu.insert_action_group("dbusmenu", item.actionGroup);
@@ -34,23 +33,16 @@ export default function TrayPanelButton() {
           const popoverStateHandler = popoverMenu.connect(
             "notify::visible",
             () => {
-              if (!popoverMenu.visible) {
-                self.set_active(false);
-              }
+              if (!popoverMenu.visible) self.set_active(false);
             },
           );
 
           const destroyHandler = self.connect("destroy", () => {
             try {
-              if (item && actionGroupHandler) {
-                item.disconnect(actionGroupHandler);
-              }
-
-              if (popoverMenu && popoverStateHandler) {
-                popoverMenu.disconnect(popoverStateHandler);
-              }
-            } catch (error) {
-              console.error("Error during tray item cleanup:", error);
+              item.disconnect(actionGroupHandler);
+              popoverMenu.disconnect(popoverStateHandler);
+            } catch (e) {
+              console.error("Tray cleanup error:", e);
             }
           });
 
@@ -61,75 +53,45 @@ export default function TrayPanelButton() {
           };
         }}
         tooltipText={bind(item, "tooltipMarkup")}
+        sensitive={bind(item, "status").as(
+          (status) => status !== AstalTray.Status.PASSIVE,
+        )}
         child={
           <image
             gicon={bind(item, "gicon")}
             pixelSize={16}
             setup={(imageWidget) => {
-              const iconBinding = bind(item, "gicon");
-              iconBinding.subscribe((gicon) => {
+              bind(item, "gicon").subscribe((gicon) => {
                 imageWidget.visible = !!gicon;
               });
             }}
           />
         }
-        sensitive={bind(item, "status").as(
-          (status) => status !== AstalTray.Status.PASSIVE,
-        )}
-        cssClasses={["tray-item-button"]}
       />
     );
   };
 
   return (
-    <box cssClasses={["tray_style"]} spacing={2}>
-      {bind(tray, "items").as((items) => {
-        if (!items || !Array.isArray(items)) {
-          return [];
-        }
-
-        return items
-          .filter((item) => {
-            return (
-              item && item.status !== AstalTray.Status.PASSIVE && item.gicon
-            );
-          })
+    <box
+      cssClasses={["tray_style"]}
+      spacing={4}
+      marginBottom={3}
+      halign={Gtk.Align.END}
+      valign={Gtk.Align.CENTER}
+      homogeneous={false}
+    >
+      {bind(tray, "items").as((items) =>
+        (items ?? [])
+          .filter(
+            (item) =>
+              item && item.status !== AstalTray.Status.PASSIVE && item.gicon,
+          )
           .map((item, index) => {
             const button = createTrayItemButton(item);
-
-            if (item.id) {
-              (button as any).name = `tray-item-${item.id}`;
-            } else {
-              (button as any).name = `tray-item-${index}`;
-            }
-
+            (button as any).name = `tray-item-${item.id ?? index}`;
             return button;
-          });
-      })}
+          }),
+      )}
     </box>
   );
-}
-
-export interface TrayItemData {
-  id?: string;
-  status: AstalTray.Status;
-  gicon: any;
-  menuModel: any;
-  actionGroup?: any;
-  tooltipMarkup?: string;
-  tooltip?: string;
-}
-
-export function cleanupTrayButton(button: any) {
-  if (button._trayHandlers) {
-    const { destroyHandler } = button._trayHandlers;
-
-    try {
-      if (destroyHandler) {
-        button.disconnect(destroyHandler);
-      }
-    } catch (error) {
-      console.error("Error during manual tray button cleanup:", error);
-    }
-  }
 }

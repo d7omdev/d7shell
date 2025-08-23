@@ -8,6 +8,7 @@ import PowerMenu from "./widget/Powermenu/PowerMenu.jsx";
 import VerificationWindow from "./widget/Powermenu/VerificationWindow.jsx";
 import QSWindow from "./widget/Quicksettings/QSWindow.jsx";
 import ScreenCorners from "./widget/ScreenCorners/ScreenCorners";
+import TerminalPopup from "./widget/Terminal/TerminalPopup";
 // import DesktopClock from "./widgets/clock/DesktopClock.jsx";
 // import NotificationWindow from "./widget/Notifactions/NotificationWindow.jsx";
 
@@ -22,5 +23,6 @@ export default [
   ScreenCorners,
   OSD,
   LangOSD,
+  TerminalPopup,
   // NotificationWindow,
 ];

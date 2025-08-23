@@ -6,7 +6,7 @@
   font-size: 4rem;
   min-height: 550px;
   min-width: 420px;
-  background: $surface_transparent;
+  // background: $surface_transparent;
   padding: 5px;
   border-radius: 8px;
 
@@ -21,21 +21,20 @@
 
     entry {
       outline: none;
-      background: transparent;
+      background: $surface_transparent;
       // padding: 20px;
-      background: none;
       border: none;
       outline: none;
       caret-color: $on_surface;
       color: $on_surface;
       margin-top: 2px;
-      margin-left: 10px;
-      margin-right: 10px;
       padding: 0px;
-      border-radius: 0px;
-      border-bottom: 1px solid $inverse_surface_transparent;
+      border-radius: 12px;
+      // border-bottom: 1px solid $inverse_surface_transparent;
       // border-top: 1px solid $inverse_surface_transparent;
-      box-shadow: none;
+      box-shadow:
+        0px 4px 6px rgba(0, 0, 0, 0.1),
+        0px 1px 3px rgba(0, 0, 0, 0.06);
 
       image {
         -gtk-icon-size: 1.5rem;
@@ -62,8 +61,13 @@
   }
 
   > scrolledwindow viewport {
+    background: $surface_transparent;
+    box-shadow:
+      0px 4px 6px rgba(0, 0, 0, 0.1),
+      0px 1px 3px rgba(0, 0, 0, 0.06);
+    border-radius: 1rem;
     padding: 10px;
-    padding-top: 2px;
+    padding-top: 16px;
 
     box {
       outline-width: 2px;
@@ -112,6 +116,80 @@
       // color: $on_surface;
       font-size: 0.85rem;
       font-weight: 400;
+    }
+
+    &.math-result {
+      min-height: 80px;
+      padding: 1rem 1.5rem;
+
+      .math-expression {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: $on_surface;
+      }
+
+      .math-result {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: $primary;
+      }
+
+      image {
+        margin: 0 1rem;
+        color: $on_surface;
+      }
+
+      &:hover {
+        .math-expression {
+          color: $on_surface;
+        }
+
+        .math-result {
+          color: $primary;
+        }
+
+        image {
+          color: $on_surface;
+        }
+      }
+
+      &:focus {
+        .math-expression {
+          color: $on_primary;
+        }
+
+        .math-result {
+          color: $on_primary;
+        }
+
+        image {
+          color: $on_primary;
+        }
+      }
+    }
+
+    &.clipboard-result {
+      min-height: 60px;
+      padding: 0.8rem 1rem;
+
+      .clipboard-preview {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: $on_surface;
+        line-height: 1.3;
+      }
+
+      &:hover {
+        .clipboard-preview {
+          color: $on_surface;
+        }
+      }
+
+      &:focus {
+        .clipboard-preview {
+          color: $on_primary;
+        }
+      }
     }
   }
 }

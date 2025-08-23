@@ -14,9 +14,7 @@ function MediaPlayer({ player }: { player: AstalMpris.Player }) {
   const artist = bind(player, "artist").as((a) => a || "Unknown Artist");
   const coverArt = bind(player, "coverArt");
   const playIcon = bind(player, "playbackStatus").as((s) =>
-    s === AstalMpris.PlaybackStatus.PLAYING
-      ? "media-playback-pause-symbolic"
-      : "media-playback-start-symbolic",
+    s === AstalMpris.PlaybackStatus.PLAYING ? "pause" : "play_arrow",
   );
 
   function format_timecode(timecode: number) {
@@ -78,7 +76,6 @@ function MediaPlayer({ player }: { player: AstalMpris.Player }) {
 
             <box
               cssClasses={["progress_container"]}
-              vexpand
               child={bind(player, "length").as((length) => (
                 <slider
                   cssClasses={["progress"]}
@@ -134,7 +131,10 @@ function MediaPlayer({ player }: { player: AstalMpris.Player }) {
                   visible={bind(player, "canGoPrevious")}
                   cssClasses={["next-icon"]}
                   child={
-                    <MaterialIcon iconName="arrow_back_ios" size="small" />
+                    <MaterialIcon
+                      iconName="keyboard_double_arrow_left"
+                      size="norm"
+                    />
                   }
                 />
                 <button
@@ -142,7 +142,8 @@ function MediaPlayer({ player }: { player: AstalMpris.Player }) {
                   cssClasses={["play-icon"]}
                   onClicked={() => player.play_pause()}
                   visible={bind(player, "canControl")}
-                  child={<image iconName={playIcon} pixelSize={22} />}
+                  /*@ts-ignore Type error suff but it works */
+                  child={<MaterialIcon iconName={playIcon} size="norm" />}
                 />
                 <button
                   valign={Gtk.Align.CENTER}
@@ -150,7 +151,10 @@ function MediaPlayer({ player }: { player: AstalMpris.Player }) {
                   visible={bind(player, "canGoNext")}
                   cssClasses={["next-icon"]}
                   child={
-                    <MaterialIcon iconName="arrow_forward_ios" size="small" />
+                    <MaterialIcon
+                      iconName="keyboard_double_arrow_right"
+                      size="norm"
+                    />
                   }
                 />
                 <button
@@ -198,10 +202,15 @@ export default function MediaPlayers() {
   const playerWidgets = new Map();
 
   const players = mpris.get_players();
+
   console.log(
     "Found players:",
     players.map((p) => p.busName),
   );
+  if (players.length === 0) {
+    return <box />;
+  }
+
   for (const player of players) {
     if (isRealPLayer(player)) {
       const widget = MediaPlayer({ player });

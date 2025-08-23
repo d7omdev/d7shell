@@ -1,180 +1,132 @@
 @use "sass:color";
 
-$background: #131318;
-
-$blue: #b7c4ff;
-
-$blue_container: #364479;
-
-$blue_source: #89b4fa;
-
-$blue_value: #89b4fa;
+$background: #101418;
 
 $error: #ffb4ab;
 
 $error_container: #93000a;
 
-$green: #91d5ad;
+$inverse_on_surface: #2e3135;
 
-$green_container: #035233;
+$inverse_primary: #35618e;
 
-$green_source: #a6e3a1;
+$inverse_surface: #e1e2e8;
 
-$green_value: #a6e3a1;
-
-$inverse_on_surface: #313036;
-
-$inverse_primary: #5d5791;
-
-$inverse_surface: #e5e1e9;
-
-$on_background: #e5e1e9;
-
-$on_blue: #1f2d61;
-
-$on_blue_container: #dde1ff;
+$on_background: #e1e2e8;
 
 $on_error: #690005;
 
 $on_error_container: #ffdad6;
 
-$on_green: #003822;
+$on_primary: #003258;
 
-$on_green_container: #acf2c8;
+$on_primary_container: #d1e4ff;
 
-$on_orange: #55200d;
+$on_primary_fixed: #001d36;
 
-$on_orange_container: #ffdbd0;
+$on_primary_fixed_variant: #184975;
 
-$on_primary: #2e295f;
+$on_secondary: #253140;
 
-$on_primary_container: #e4dfff;
+$on_secondary_container: #d6e3f7;
 
-$on_primary_fixed: #191249;
+$on_secondary_fixed: #0f1c2b;
 
-$on_primary_fixed_variant: #454077;
+$on_secondary_fixed_variant: #3b4858;
 
-$on_purple: #36265d;
+$on_surface: #e1e2e8;
 
-$on_purple_container: #e9ddff;
+$on_surface_variant: #c3c7cf;
 
-$on_red: #511d3d;
+$on_tertiary: #3b2948;
 
-$on_red_container: #ffd8ea;
+$on_tertiary_container: #f2daff;
 
-$on_secondary: #302e41;
+$on_tertiary_fixed: #251432;
 
-$on_secondary_container: #e4dff9;
+$on_tertiary_fixed_variant: #523f5f;
 
-$on_secondary_fixed: #1b192c;
+$outline: #8d9199;
 
-$on_secondary_fixed_variant: #474459;
+$outline_variant: #42474e;
 
-$on_surface: #e5e1e9;
+$primary: #a0cafd;
 
-$on_surface_variant: #c9c5d0;
+$primary_container: #184975;
 
-$on_tertiary: #482537;
+$primary_fixed: #d1e4ff;
 
-$on_tertiary_container: #ffd8e8;
-
-$on_tertiary_fixed: #301122;
-
-$on_tertiary_fixed_variant: #613b4e;
-
-$on_yellow: #452b00;
-
-$on_yellow_container: #ffddb3;
-
-$orange: #ffb59d;
-
-$orange_container: #723520;
-
-$orange_source: #fab387;
-
-$orange_value: #fab387;
-
-$outline: #928f99;
-
-$outline_variant: #47464f;
-
-$primary: #c6bfff;
-
-$primary_container: #454077;
-
-$primary_fixed: #e4dfff;
-
-$primary_fixed_dim: #c6bfff;
-
-$purple: #cfbdfe;
-
-$purple_container: #4d3d75;
-
-$purple_source: #cba6f7;
-
-$purple_value: #cba6f7;
-
-$red: #fbb0d8;
-
-$red_container: #6c3455;
-
-$red_source: #f38ba8;
-
-$red_value: #f38ba8;
+$primary_fixed_dim: #a0cafd;
 
 $scrim: #000000;
 
-$secondary: #c8c3dc;
+$secondary: #bac8db;
 
-$secondary_container: #474459;
+$secondary_container: #3b4858;
 
-$secondary_fixed: #e4dff9;
+$secondary_fixed: #d6e3f7;
 
-$secondary_fixed_dim: #c8c3dc;
+$secondary_fixed_dim: #bac8db;
 
 $shadow: #000000;
 
-$source_color: #908bb9;
+$surface: #101418;
 
-$surface: #131318;
+$surface_bright: #36393e;
 
-$surface_bright: #3a383e;
+$surface_container: #1d2024;
 
-$surface_container: #201f25;
+$surface_container_high: #272a2f;
 
-$surface_container_high: #2a292f;
+$surface_container_highest: #32353a;
 
-$surface_container_highest: #35343a;
+$surface_container_low: #191c20;
 
-$surface_container_low: #1c1b20;
+$surface_container_lowest: #0b0e13;
 
-$surface_container_lowest: #0e0e13;
+$surface_dim: #101418;
 
-$surface_dim: #131318;
+$surface_tint: #a0cafd;
 
-$surface_tint: #c6bfff;
+$surface_variant: #42474e;
 
-$surface_variant: #47464f;
+$tertiary: #d6bee5;
 
-$tertiary: #ebb8cf;
+$tertiary_container: #523f5f;
 
-$tertiary_container: #613b4e;
+$tertiary_fixed: #f2daff;
 
-$tertiary_fixed: #ffd8e8;
-
-$tertiary_fixed_dim: #ebb8cf;
-
-$yellow: #f5bd6f;
-
-$yellow_container: #633f00;
-
-$yellow_source: #f9e2af;
-
-$yellow_value: #f9e2af;
+$tertiary_fixed_dim: #d6bee5;
 
 $theme: "dark";
+
+// Legacy color compatibility
+$red: #ffb4ab;
+$red_source: #ffb4ab;
+$red_value: #ffb4ab;
+$on_red: #690005;
+$blue: #a0cafd;
+$blue_source: #a0cafd;
+$blue_value: #a0cafd;
+$on_blue: #003258;
+$purple: #d6bee5;
+$purple_source: #d6bee5;
+$purple_value: #d6bee5;
+$on_purple: #3b2948;
+$green: #bac8db;
+$green_source: #bac8db;
+$green_value: #bac8db;
+$on_green: #253140;
+$yellow: #f9e2af;
+$yellow_source: #f9e2af;
+$yellow_value: #f9e2af;
+$on_yellow: #452b00;
+$orange: #fab387;
+$orange_source: #fab387;
+$orange_value: #fab387;
+$on_orange: #55200d;
+
 $surface_transparent: color.scale($surface, $alpha: -20%);
-// $surface_transparent: $surface;
 $inverse_surface_transparent: color.scale($inverse_surface, $alpha: -92%);
 $inverse_surface_transparent_variant: color.scale(
   $inverse_surface,

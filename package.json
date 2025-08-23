@@ -18,6 +18,8 @@
     "check-format": "bun x prettier --check .",
     "lint": "bun x eslint . --ext .ts,.js",
     "run": "ags run app.ts -g 4",
-    "dev": "bash -c ./scripts/dev"
+    "dev": "bash -c ./scripts/dev",
+    "bundle": "bash -c ./scripts/bundle",
+    "start": "bun bundle && bash -c ~/Projects/d7shell/dist/d7shell"
   }
 }

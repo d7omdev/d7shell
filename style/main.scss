@@ -12,6 +12,7 @@
 @use "./wallpaperpicker.scss";
 @use "./applauncher.scss";
 @use "./mediaPlayer.scss";
+@use "./terminal.scss";
 @use "roundedcorners.scss";
 @use "./components.scss";
 
@@ -24,7 +25,7 @@ scale {
     @include rounded-full;
   }
 
-  $width: 0.25em;
+  $width: 0.3em;
 
   trough {
     min-height: $width;
@@ -45,4 +46,32 @@ scale {
     min-width: $width;
     margin: -0.6em;
   }
+}
+
+/* Popover */
+popover.tray-menu {
+  // background: #1e1e2e;
+  // border-radius: 8px;
+  // padding: 6px;
+  margin-top: 1rem;
+}
+
+/* model buttons */
+popover.tray-menu modelbutton {
+  color: #cdd6f4;
+  font-size: 13px;
+  padding: 2px 12px;
+  border-radius: 12px;
+}
+
+/* Hover effect */
+popover.tray-menu modelbutton:hover {
+  background: #313244;
+  color: #ffffff;
+}
+
+/* Optional: separators inside menus */
+popover.tray-menu separator {
+  margin: 4px 0;
+  background: #45475a;
 }

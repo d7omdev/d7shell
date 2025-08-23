@@ -132,8 +132,11 @@ export default function Notification({
               if (n.body) {
                 const bodyText =
                   n.body.length > 200
-                    ? n.body.substring(0, 200) + "..."
-                    : n.body;
+                    ? GLib.markup_escape_text(
+                        n.body.substring(0, 200) + "...",
+                        -1,
+                      )
+                    : GLib.markup_escape_text(n.body, -1);
                 textChildren.push(
                   <label
                     cssClasses={["body"]}

@@ -1,0 +1,155 @@
+@use "colors.scss" as *;
+@use "./lib/mixins.scss" as *;
+
+.terminal-container {
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  border: 1px solid #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.terminal-header {
+  background-color: #2d2d30;
+  padding: 8px 12px;
+  border-bottom: 1px solid #333;
+
+  .terminal-title {
+    @include techfont;
+    color: #cccccc;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .terminal-close {
+    background: transparent;
+    border: none;
+    color: #cccccc;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+
+    &:hover {
+      background-color: #414141;
+    }
+
+    &:active {
+      background-color: #4f4f4f;
+    }
+  }
+}
+
+.terminal-scroll {
+  background-color: #1e1e1e;
+  min-height: 300px;
+
+  scrollbar {
+    background-color: transparent;
+
+    &.vertical slider {
+      background-color: #404040;
+      border-radius: 6px;
+      min-width: 6px;
+
+      &:hover {
+        background-color: #505050;
+      }
+    }
+
+    &.horizontal slider {
+      background-color: #404040;
+      border-radius: 6px;
+      min-height: 6px;
+
+      &:hover {
+        background-color: #505050;
+      }
+    }
+  }
+}
+
+.terminal-output {
+  @include techfont;
+  background-color: #1e1e1e;
+  color: #cccccc;
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.4;
+  border: none;
+
+  text {
+    background-color: transparent;
+    color: #cccccc;
+  }
+
+  &:selected {
+    background-color: #264f78;
+    color: #ffffff;
+  }
+}
+
+.terminal-input-container {
+  background-color: #252526;
+  padding: 8px 12px;
+  border-top: 1px solid #333;
+
+  .terminal-prompt {
+    @include techfont;
+    color: #4ec9b0;
+    font-size: 13px;
+    font-weight: bold;
+    min-width: 20px;
+  }
+}
+
+.terminal-input {
+  @include techfont;
+  background-color: transparent;
+  border: none;
+  color: #cccccc;
+  font-size: 13px;
+  padding: 4px 0;
+
+  &:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+  }
+
+  &::placeholder {
+    color: #6a6a6a;
+  }
+
+  &:disabled {
+    color: #6a6a6a;
+  }
+}
+
+// Terminal color theme for command output
+.terminal-output {
+  // Error text (red)
+  .error {
+    color: #f14c4c;
+  }
+
+  // Success text (green)
+  .success {
+    color: #23d18b;
+  }
+
+  // Warning text (yellow)
+  .warning {
+    color: #f5f543;
+  }
+
+  // Info text (blue)
+  .info {
+    color: #3794ff;
+  }
+
+  // Command prompt
+  .prompt {
+    color: #4ec9b0;
+    font-weight: bold;
+  }
+}

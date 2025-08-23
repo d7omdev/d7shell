@@ -71,10 +71,15 @@
       }
     }
   }
-  picture {
+  picture,
+  image.picture {
     border-radius: 8px;
     // border: 2px solid transparent;
     background-size: contain;
+    max-width: 142px;
+    max-height: 80px;
+    min-width: 142px;
+    min-height: 80px;
   }
   // picture:hover {
   //   border: 2px solid $primary;

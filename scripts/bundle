@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+mkdir -p dist
+ags bundle app.ts --gtk 4 ./dist/d7shell -d "DATADIR='/usr/share/d7shell'"
