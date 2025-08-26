@@ -20,17 +20,19 @@ export default function SpeakerPage() {
           }}
           iconName={"go-previous-symbolic"}
         />
-        {/* <label label={"Speaker"} hexpand xalign={0} /> */}
-        <label useMarkup={true} label={"<b> Speaker</b>"} hexpand xalign={0} />
-        {/* <image */}
-        {/*   iconName={"audio-speakers-symbolic"} */}
-        {/*   hexpand */}
-        {/*   halign={Gtk.Align.END} */}
-        {/* /> */}
+        <label
+          useMarkup={true}
+          label={"<b> Audio Devices</b>"}
+          hexpand
+          xalign={0}
+        />
       </box>
+
       <Gtk.Separator />
-      {bind(audio, "speakers").as((d) =>
-        d.map((speaker) => (
+
+      <label useMarkup={true} label={"<b>Output Devices</b>"} xalign={0} />
+      {bind(audio, "speakers").as((speakers) =>
+        speakers.map((speaker) => (
           <button
             cssClasses={bind(speaker, "isDefault").as((isD) => {
               const classes = ["button"];
@@ -39,13 +41,44 @@ export default function SpeakerPage() {
             })}
             onClicked={() => {
               speaker.set_is_default(true);
-              qsPage.set("main");
             }}
           >
             <box>
               <image iconName={speaker.volumeIcon} />
               <label
                 label={speaker.description}
+                ellipsize={Pango.EllipsizeMode.END}
+                maxWidthChars={30}
+              />
+            </box>
+          </button>
+        )),
+      )}
+
+      <Gtk.Separator />
+
+      <label useMarkup={true} label={"<b>Input Devices</b>"} xalign={0} />
+      {bind(audio, "microphones").as((microphones) =>
+        microphones.map((microphone) => (
+          <button
+            cssClasses={bind(microphone, "isDefault").as((isD) => {
+              const classes = ["button"];
+              isD && classes.push("active");
+              return classes;
+            })}
+            onClicked={() => {
+              microphone.set_is_default(true);
+            }}
+          >
+            <box>
+              <image
+                iconName={
+                  microphone.volumeIcon ||
+                  "microphone-sensitivity-high-symbolic"
+                }
+              />
+              <label
+                label={microphone.description}
                 ellipsize={Pango.EllipsizeMode.END}
                 maxWidthChars={30}
               />

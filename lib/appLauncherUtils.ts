@@ -1,0 +1,280 @@
+import { Gio, GLib } from "astal";
+
+export interface SearchResult {
+  type:
+    | "app"
+    | "math"
+    | "directory"
+    | "command"
+    | "web"
+    | "action"
+    | "ai"
+    | "clipboard"
+    | "emoji";
+  title: string;
+  subtitle: string;
+  icon: string;
+  data: any;
+}
+
+export interface ClipboardItem {
+  value: string;
+  recorded: string;
+  filePath: string;
+  pinned: boolean;
+}
+
+export interface FileItem {
+  parentPath: string;
+  name: string;
+  type: string;
+  icon: string;
+}
+
+const APP_DIRECTORIES = [
+  "/usr/share/applications",
+  "/usr/local/share/applications",
+  "/var/lib/flatpak/exports/share/applications",
+  `${GLib.get_home_dir()}/.local/share/applications`,
+  `${GLib.get_home_dir()}/.local/share/flatpak/exports/share/applications`,
+  "/snap/bin",
+  "/var/lib/snapd/desktop/applications",
+];
+
+export function couldBeMath(text: string): boolean {
+  const mathChars = /^[0-9+\-*/().\s^√πe]+$/;
+  const hasOperator = /[+\-*/^√]/.test(text);
+  const hasNumber = /[0-9]/.test(text);
+  return mathChars.test(text) && hasOperator && hasNumber;
+}
+
+export function hasUnterminatedBackslash(text: string): boolean {
+  return text.endsWith("\\") && !text.endsWith("\\\\");
+}
+
+export function expandTilde(path: string): string {
+  if (path.startsWith("~/")) {
+    return path.replace("~", GLib.get_home_dir());
+  }
+  return path;
+}
+
+export function ls(options: {
+  path: string;
+  silent?: boolean;
+  limit?: number;
+}): FileItem[] {
+  try {
+    const expandedPath = expandTilde(options.path);
+    const dir = Gio.File.new_for_path(expandedPath);
+
+    if (!dir.query_exists(null)) {
+      return [];
+    }
+
+    const enumerator = dir.enumerate_children(
+      "standard::name,standard::type,standard::icon",
+      Gio.FileQueryInfoFlags.NONE,
+      null,
+    );
+
+    const results: FileItem[] = [];
+    let info: Gio.FileInfo | null;
+    let count = 0;
+    const limit = options.limit || 50;
+
+    while ((info = enumerator.next_file(null)) !== null && count < limit) {
+      const name = info.get_name();
+      const fileType = info.get_file_type();
+      const icon = info.get_icon();
+
+      if (name && !name.startsWith(".")) {
+        results.push({
+          parentPath: expandedPath,
+          name: name,
+          type: fileType === Gio.FileType.DIRECTORY ? "directory" : "file",
+          icon: icon
+            ? icon.to_string() || "text-x-generic"
+            : fileType === Gio.FileType.DIRECTORY
+              ? "folder"
+              : "text-x-generic",
+        });
+        count++;
+      }
+    }
+
+    return results.sort((a, b) => {
+      if (a.type !== b.type) {
+        return a.type === "directory" ? -1 : 1;
+      }
+      return a.name.localeCompare(b.name);
+    });
+  } catch (error) {
+    if (!options.silent) {
+      console.error("Error reading directory:", error);
+    }
+    return [];
+  }
+}
+
+export async function execAsync(command: string[]): Promise<string> {
+  return new Promise((resolve, reject) => {
+    try {
+      const [success, , , stdout] = GLib.spawn_async_with_pipes(
+        null,
+        command,
+        null,
+        GLib.SpawnFlags.SEARCH_PATH,
+        null,
+      );
+
+      if (!success) {
+        reject(new Error("Failed to spawn process"));
+        return;
+      }
+
+      const stdoutChannel = GLib.IOChannel.unix_new(stdout);
+      let output = "";
+
+      const readOutput = () => {
+        try {
+          const [status, data] = stdoutChannel.read_to_end();
+          if (status === GLib.IOStatus.NORMAL && data instanceof Uint8Array) {
+            output += new TextDecoder().decode(data);
+          }
+          resolve(output);
+        } catch (e) {
+          reject(e);
+        }
+        return false;
+      };
+
+      GLib.timeout_add(GLib.PRIORITY_DEFAULT, 100, readOutput);
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
+export function exec(command: string): string {
+  try {
+    const [success, output] = GLib.spawn_command_line_sync(command);
+    return success && output ? new TextDecoder().decode(output) : "";
+  } catch {
+    return "";
+  }
+}
+
+let cachedClipboard: ClipboardItem[] = [];
+let clipboardCacheTime = 0;
+const CLIPBOARD_CACHE_TTL = 30000;
+
+export function readClipboardHistory(): ClipboardItem[] {
+  try {
+    const now = Date.now();
+
+    if (
+      cachedClipboard.length > 0 &&
+      now - clipboardCacheTime < CLIPBOARD_CACHE_TTL
+    ) {
+      return cachedClipboard;
+    }
+
+    const clipboardFile = `${GLib.get_home_dir()}/.config/clipse/clipboard_history.json`;
+    const file = Gio.File.new_for_path(clipboardFile);
+
+    if (!file.query_exists(null)) {
+      return [];
+    }
+
+    const [success, content] = file.load_contents(null);
+    if (!success || !content) {
+      return [];
+    }
+
+    const contentStr = new TextDecoder().decode(content);
+
+    let data;
+    try {
+      data = JSON.parse(contentStr);
+    } catch (parseError) {
+      console.error("Failed to parse clipboard JSON:", parseError);
+      return [];
+    }
+
+    let items: ClipboardItem[] = [];
+
+    if (Array.isArray(data)) {
+      items = data.filter(
+        (item: any) =>
+          item && typeof item === "object" && typeof item.value === "string",
+      );
+    } else if (data && typeof data === "object") {
+      const dataObj = data as any;
+      if (dataObj.clipboardHistory && Array.isArray(dataObj.clipboardHistory)) {
+        items = dataObj.clipboardHistory.filter(
+          (item: any) =>
+            item && typeof item === "object" && typeof item.value === "string",
+        );
+      } else if (dataObj.clipboard && Array.isArray(dataObj.clipboard)) {
+        items = dataObj.clipboard.filter(
+          (item: any) =>
+            item && typeof item === "object" && typeof item.value === "string",
+        );
+      } else if (dataObj.history && Array.isArray(dataObj.history)) {
+        items = dataObj.history.filter(
+          (item: any) =>
+            item && typeof item === "object" && typeof item.value === "string",
+        );
+      }
+    }
+
+    items = items.slice(0, 20);
+
+    cachedClipboard = items;
+    clipboardCacheTime = now;
+
+    return cachedClipboard;
+  } catch (error) {
+    console.error("Failed to read clipboard history:", error);
+    return [];
+  }
+}
+
+export function searchClipboard(query: string): SearchResult[] {
+  const items = readClipboardHistory();
+  const results: SearchResult[] = [];
+  const searchTerm = query.toLowerCase();
+
+  items.forEach((item, index) => {
+    if (!item.value || typeof item.value !== "string") return;
+
+    const content = item.value.toLowerCase();
+    if (query === "" || content.includes(searchTerm)) {
+      const displayContent =
+        item.value.length > 50
+          ? `${item.value.substring(0, 50)}...`
+          : item.value;
+
+      const timeAgo = new Date(item.recorded).toLocaleString();
+
+      results.push({
+        type: "clipboard",
+        title: displayContent.replace(/\n/g, " "),
+        subtitle: `Copied ${timeAgo}`,
+        icon: "edit-paste",
+        data: {
+          content: item.value,
+          recorded: item.recorded,
+          index,
+        },
+      });
+    }
+  });
+
+  return results.slice(0, 10);
+}
+
+export function getAppDirectories(): string[] {
+  return APP_DIRECTORIES;
+}

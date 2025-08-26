@@ -1,7 +1,9 @@
 {
   "name": "d7shell",
   "dependencies": {
-    "astal": "file:/usr/share/astal/gjs"
+    "astal": "file:/usr/share/astal/gjs",
+    "emojibase": "^16.0.0",
+    "emojibase-data": "^16.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",

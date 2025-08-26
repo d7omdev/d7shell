@@ -8,7 +8,7 @@ function getNestedValue(obj: object, keyPath: string) {
   const keys = keyPath.split(".");
   let current = obj;
 
-  for (let key of keys) {
+  for (const key of keys) {
     if (current && current.hasOwnProperty(key)) {
       current = current[key];
     } else {

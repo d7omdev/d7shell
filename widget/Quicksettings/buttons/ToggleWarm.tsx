@@ -18,19 +18,11 @@ export default function WarmColorsButton() {
             logError(err, "Failed to kill gammastep"),
           );
           warmColorsActive.set(false);
-          execAsync([
-            "notify-send",
-            "-i",
-            "display",
-            "Warm Colors",
-            "Disabled",
-          ]);
         } else {
           execAsync(["sh", "-c", "gammastep -O 3500 & disown"]).catch((err) =>
             logError(err, "Failed to start gammastep"),
           );
           warmColorsActive.set(true);
-          execAsync(["notify-send", "-i", "display", "Warm Colors", "Enabled"]);
         }
       }}
     />

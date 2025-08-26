@@ -17,6 +17,7 @@ function FocusedAppLabels({
     <box
       orientation={Gtk.Orientation.VERTICAL}
       spacing={0}
+      marginBottom={4}
       cssClasses={["focused-app-labels"]}
     >
       <label
@@ -74,7 +75,9 @@ export default () => {
   const clients = bind(hypr, "clients");
 
   const sortedClients = clients.as((clients) =>
-    clients.sort((a, b) => a.workspace.id - b.workspace.id),
+    clients
+      .filter((client) => client.workspace !== null)
+      .sort((a, b) => a.workspace.id - b.workspace.id),
   );
 
   return (

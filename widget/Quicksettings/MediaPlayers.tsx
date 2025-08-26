@@ -7,7 +7,6 @@ import {
   Player,
   ShuffleStatus,
 } from "../../lib/mpris";
-import { bind } from "astal";
 
 const mpris = new Mpris();
 
@@ -22,32 +21,35 @@ function MediaPlayer({ player }: { player: Player }) {
   const { START, END, CENTER } = Gtk.Align;
 
   const title = player.title((t) => t || "Unknown Track");
-
   const artist = player.artist((a) => a || "Unknown Artist");
 
   const playIcon = player.playbackStatus((s) =>
     s === PlaybackStatus.Playing ? "" : "",
   );
 
-  // 使用条件渲染，只在有有效的字符串类型封面时才渲染image组件
   return (
-    <box cssClasses={["mediaPlayer"]} vertical={true}>
-      {player.coverArt((coverArt) => {
-        return typeof coverArt === "string" ? <image file={coverArt} /> : null;
-      })}
+    <box cssClasses={["mediaPlayer"]} vertical>
+      <box
+        child={player.coverArt((coverArt) =>
+          typeof coverArt === "string" ? <image file={coverArt} /> : <box />,
+        )}
+      />
+
       <label
         cssClasses={["labelSmallBold"]}
         ellipsize={Pango.EllipsizeMode.END}
         halign={CENTER}
-        hexpand={true}
+        hexpand
         label={title}
       />
+
       <label
         cssClasses={["labelSmall"]}
         ellipsize={Pango.EllipsizeMode.END}
         halign={CENTER}
         label={artist}
       />
+
       <box cssClasses={["seekContainer"]} vertical={false}>
         <label
           cssClasses={["labelSmall"]}
@@ -57,7 +59,7 @@ function MediaPlayer({ player }: { player: Player }) {
         />
         <slider
           cssClasses={["seek"]}
-          hexpand={true}
+          hexpand
           visible={player.trackLength((l) => l > 0)}
           onChangeValue={({ value }) => {
             player.setPosition(value * player.trackLength.get());
@@ -75,7 +77,8 @@ function MediaPlayer({ player }: { player: Player }) {
           label={player.trackLength((l) => (l > 0 ? lengthStr(l) : "0:00"))}
         />
       </box>
-      <box halign={CENTER} spacing={15} homogeneous={true} hexpand={true}>
+
+      <box halign={CENTER} spacing={15} homogeneous hexpand>
         <button
           cssClasses={["controlButton"]}
           onClicked={() => {
@@ -88,38 +91,32 @@ function MediaPlayer({ player }: { player: Player }) {
           visible={player.shuffleStatus(
             (shuffle) => shuffle !== ShuffleStatus.Unsupported,
           )}
-          label={player.shuffleStatus((shuffle) => {
-            if (shuffle === ShuffleStatus.Enabled) {
-              return "";
-            } else {
-              return "󰒞";
-            }
-          })}
+          label={player.shuffleStatus((shuffle) =>
+            shuffle === ShuffleStatus.Enabled ? "" : "󰒞",
+          )}
         />
+
         <button
           cssClasses={["controlButton"]}
-          onClicked={() => {
-            player.previousTrack();
-          }}
+          onClicked={() => player.previousTrack()}
           visible={player.canGoPrevious()}
           label=""
         />
+
         <button
           cssClasses={["controlButton"]}
-          onClicked={() => {
-            player.playPause();
-          }}
+          onClicked={() => player.playPause()}
           visible={player.canControl()}
           label={playIcon}
         />
+
         <button
           cssClasses={["controlButton"]}
-          onClicked={() => {
-            player.nextTrack();
-          }}
+          onClicked={() => player.nextTrack()}
           visible={player.canGoNext()}
           label=""
         />
+
         <button
           cssClasses={["controlButton"]}
           onClicked={() => {
@@ -135,13 +132,9 @@ function MediaPlayer({ player }: { player: Player }) {
             (status) => status !== LoopStatus.Unsupported,
           )}
           label={player.loopStatus((status) => {
-            if (status === LoopStatus.None) {
-              return "󰑗";
-            } else if (status === LoopStatus.Playlist) {
-              return "󰑖";
-            } else {
-              return "󰑘";
-            }
+            if (status === LoopStatus.None) return "󰑗";
+            if (status === LoopStatus.Playlist) return "󰑖";
+            return "󰑘";
           })}
         />
       </box>
@@ -150,11 +143,13 @@ function MediaPlayer({ player }: { player: Player }) {
 }
 
 export default function () {
+  if (mpris.players.length === 0) return <box />;
+
   return (
-    <box cssClasses={["mediaPlayersContainer"]} vertical={true}>
-      {mpris.players((players) => {
-        return players.map((player) => <MediaPlayer player={player} />);
-      })}
+    <box cssClasses={["mediaPlayersContainer"]} vertical>
+      {mpris.players((players) =>
+        players.map((player) => <MediaPlayer player={player} />),
+      )}
     </box>
   );
 }

@@ -69,7 +69,7 @@ export const upower = Variable<Array<UpowerProps>>([]).poll(
     // Split the string into lines for easy processing
     const lines = out.split("\n");
 
-    let devices = [];
+    const devices = [];
     let currentDevice = { model: "", iconName: "", batteryPercentage: 0 };
 
     // Loop through each line and process the device data

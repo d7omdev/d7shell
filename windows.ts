@@ -20,7 +20,7 @@ export default [
   QSWindow,
   PowerMenu,
   VerificationWindow,
-  ScreenCorners,
+  // ScreenCorners,
   OSD,
   LangOSD,
   TerminalPopup,

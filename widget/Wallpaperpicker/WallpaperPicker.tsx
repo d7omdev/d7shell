@@ -1,4 +1,4 @@
-import { GLib, Gio, timeout } from "astal";
+import { GLib, Gio } from "astal";
 import PopupWindow from "../../common/PopupWindow";
 import GdkPixbuf from "gi://GdkPixbuf";
 import { App, Astal, Gtk, hook } from "astal/gtk4";
@@ -7,7 +7,7 @@ import { bash, ensureDirectory, sh } from "../../lib/utils";
 
 const { wallpaper } = options;
 const { mode } = options.theme;
-const cachePath = `${GLib.get_user_cache_dir()}/aiser-astal/wallpapers`;
+const cachePath = `${GLib.get_user_cache_dir()}/d7shell/wallpapers`;
 const imageFormats = [
   ".jpeg",
   ".jpg",
@@ -18,6 +18,10 @@ const imageFormats = [
   ".tiff",
   ".tga",
 ];
+
+// Cache state management
+const wallpaperCache: Map<string, string[]> = new Map();
+let wallpaperGrid: Astal.Box | null = null;
 
 function getWallpaperList(path: string) {
   const dir = Gio.file_new_for_path(path);
@@ -78,58 +82,99 @@ function cacheImage(
   }
 }
 
+function createWallpaperButton(
+  filename: string,
+  path: string,
+  modeNow: string,
+) {
+  return (
+    <button
+      canFocus
+      cssClasses={["wall-button"]}
+      tooltipText={filename}
+      onClicked={async () => {
+        const cached = cacheImage(
+          `${path}/${filename}`,
+          cachePath,
+          450,
+          `${filename.split(".")[0]}_current`,
+        );
+        await sh([
+          "sh",
+          `${GLib.getenv("HOME")}/Projects/d7shell/scripts/changecolor.sh`,
+          `${path}/${filename}`,
+          modeNow,
+        ]);
+        wallpaper.current.set(cached);
+      }}
+      child={
+        <Gtk.Picture
+          cssClasses={["picture"]}
+          overflow={Gtk.Overflow.HIDDEN}
+          contentFit={Gtk.ContentFit.COVER}
+          widthRequest={200}
+          heightRequest={80}
+          file={Gio.file_new_for_path(
+            filename.toLowerCase().endsWith(".gif")
+              ? `${path}/${filename}`
+              : `${cachePath}/${filename}`,
+          )}
+        />
+      }
+    />
+  );
+}
+
 async function populateBox(box: Astal.Box, path: string) {
-  const files = getWallpaperList(path);
+  wallpaperGrid = box;
+  const cacheKey = path;
+
+  // Check if we already have cached file list for this path
+  let files = wallpaperCache.get(cacheKey);
+
+  if (!files) {
+    // First time loading this path - get file list and cache it
+    files = getWallpaperList(path);
+    wallpaperCache.set(cacheKey, files);
+  }
+
   const modeNow = mode.get();
 
-  // Only cache missing wallpapers
+  // Show cached wallpapers immediately if thumbnails exist
+  const cachedFiles = files.filter((f) =>
+    GLib.file_test(`${cachePath}/${f}`, GLib.FileTest.EXISTS),
+  );
+
+  if (cachedFiles.length > 0) {
+    // Show cached wallpapers immediately
+    box.set_children(
+      cachedFiles.map((f) => createWallpaperButton(f, path, modeNow)),
+    );
+  } else {
+    // Show loading message
+    box.set_children([
+      <label label="Loading wallpapers..." hexpand halign={Gtk.Align.CENTER} />,
+    ]);
+  }
+
+  // Cache missing wallpapers in background
   const toCache = files.filter(
     (f) => !GLib.file_test(`${cachePath}/${f}`, GLib.FileTest.EXISTS),
   );
-  if (toCache.length > 0)
-    await Promise.all(
-      toCache.map((f) => cacheImage(`${path}/${f}`, cachePath, 200)),
-    );
 
-  // Populate GTK buttons once after caching
-  box.set_children(
-    files.map((f) => (
-      <button
-        canFocus
-        cssClasses={["wall-button"]}
-        tooltipText={f}
-        onClicked={async () => {
-          const cached = cacheImage(
-            `${path}/${f}`,
-            cachePath,
-            450,
-            `${f.split(".")[0]}_current`,
-          );
-          await sh([
-            "sh",
-            `${GLib.getenv("HOME")}/Projects/d7shell/scripts/changecolor.sh`,
-            `${path}/${f}`,
-            modeNow,
-          ]);
-          wallpaper.current.set(cached);
-        }}
-        child={
-          <Gtk.Picture
-            cssClasses={["picture"]}
-            overflow={Gtk.Overflow.HIDDEN}
-            contentFit={Gtk.ContentFit.COVER}
-            widthRequest={200}
-            heightRequest={80}
-            file={Gio.file_new_for_path(
-              f.toLowerCase().endsWith(".gif")
-                ? `${path}/${f}`
-                : `${cachePath}/${f}`,
-            )}
-          />
-        }
-      />
-    )),
-  );
+  if (toCache.length > 0) {
+    // Cache thumbnails in background
+    Promise.all(
+      toCache.map((f) => cacheImage(`${path}/${f}`, cachePath, 200)),
+    ).then(() => {
+      // Update the UI with all wallpapers (cached + newly cached)
+      if (wallpaperGrid) {
+        wallpaperGrid.set_children(
+          files.map((f) => createWallpaperButton(f, path, modeNow)),
+        );
+      }
+    });
+  }
 }
 
 function wallpaperPicker() {
@@ -145,8 +190,8 @@ function wallpaperPicker() {
       setup={(self) => {
         hook(self, App, "window-toggled", (_, win) => {
           if (win.name === "wallpaperpicker" && !win.visible) {
-            self.set_child(null);
-            self.destroy();
+            // Don't destroy the window - just hide it to preserve cache
+            self.hide();
           }
         });
       }}
@@ -162,10 +207,16 @@ function wallpaperPicker() {
             <label cssClasses={["directory"]} label={wallpaper.folder()} />
             <button
               tooltipText="Clear cache"
-              onClicked={() =>
-                GLib.file_test(cachePath, GLib.FileTest.IS_DIR) &&
-                bash(`rm -r ${cachePath}`)
-              }
+              onClicked={() => {
+                if (GLib.file_test(cachePath, GLib.FileTest.IS_DIR)) {
+                  bash(`rm -r ${cachePath}`);
+                  wallpaperCache.clear();
+                  // Refresh the current view
+                  if (wallpaperGrid) {
+                    populateBox(wallpaperGrid, wallpaper.folder.get());
+                  }
+                }
+              }}
               iconName="user-trash-full-symbolic"
             />
             <button
@@ -181,6 +232,7 @@ function wallpaperPicker() {
                     const folder = chooser.select_folder_finish(res);
                     if (folder?.get_path()) {
                       wallpaper.folder.set(folder.get_path()!);
+                      wallpaperCache.clear();
                       wallpaperPicker();
                     }
                   } catch (e) {
@@ -206,7 +258,7 @@ function wallpaperPicker() {
                 }}
                 child={
                   <label
-                    label="Caching wallpapers..."
+                    label="Loading wallpapers..."
                     hexpand
                     halign={Gtk.Align.CENTER}
                   />
@@ -221,7 +273,14 @@ function wallpaperPicker() {
 }
 
 export function toggleWallpaperPicker() {
-  const exists = App.get_windows().some((w) => w.name === "wallpaperpicker");
-  if (!exists) wallpaperPicker();
-  else App.get_window("wallpaperpicker")?.hide();
+  const existingWindow = App.get_window("wallpaperpicker");
+  if (!existingWindow) {
+    wallpaperPicker();
+  } else {
+    if (existingWindow.visible) {
+      existingWindow.hide();
+    } else {
+      existingWindow.show();
+    }
+  }
 }

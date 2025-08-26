@@ -59,7 +59,7 @@ export class Player {
     this.positionInterval = interval(1000, () => {
       if (this.proxy) {
         // Create a variant with the parameters (interface, property)
-        let parameters = new GLib.Variant("(ss)", [
+        const parameters = new GLib.Variant("(ss)", [
           "org.mpris.MediaPlayer2.Player",
           "Position",
         ]);
@@ -71,11 +71,11 @@ export class Player {
           null,
           (proxy, res) => {
             try {
-              let result = proxy?.call_finish(res);
+              const result = proxy?.call_finish(res);
               // The result is a variant tuple; extract the first element.
               // @ts-ignore
-              let posVariant = result.deep_unpack()[0];
-              let pos = (posVariant.deep_unpack() as number) / 1000000;
+              const posVariant = result.deep_unpack()[0];
+              const pos = (posVariant.deep_unpack() as number) / 1000000;
               this.position.set(pos);
             } catch (e) {
               log("Failed to update position: " + e);
@@ -125,7 +125,7 @@ export class Player {
     const metaVariant = this.proxy!.get_cached_property("Metadata");
     if (metaVariant) {
       try {
-        let meta: any = metaVariant.deep_unpack();
+        const meta: any = metaVariant.deep_unpack();
         if (meta["xesam:title"]) {
           this.title.set(meta["xesam:title"].deep_unpack());
         } else {
@@ -143,7 +143,7 @@ export class Player {
         }
         // Extract track length from metadata.
         if (meta["mpris:length"]) {
-          let lengthNumber =
+          const lengthNumber =
             (meta["mpris:length"].deep_unpack() as number) / 1000000;
           this.trackLength.set(lengthNumber);
         } else {
@@ -170,7 +170,7 @@ export class Player {
     const pbVar = this.proxy!.get_cached_property("PlaybackStatus");
     if (pbVar) {
       try {
-        let pbStr = pbVar.deep_unpack() as string;
+        const pbStr = pbVar.deep_unpack() as string;
         this.playbackStatus.set(pbStr as PlaybackStatus);
       } catch (e) {
         this.playbackStatus.set(null);
@@ -183,7 +183,7 @@ export class Player {
     const posVar = this.proxy!.get_cached_property("Position");
     if (posVar) {
       try {
-        let posNumber = (posVar.deep_unpack() as number) / 1000000;
+        const posNumber = (posVar.deep_unpack() as number) / 1000000;
         this.position.set(posNumber);
       } catch (e) {
         this.position.set(0);
@@ -196,7 +196,7 @@ export class Player {
     const shuffleVar = this.proxy!.get_cached_property("Shuffle");
     if (shuffleVar) {
       try {
-        let shuffleBool = shuffleVar.deep_unpack() as boolean;
+        const shuffleBool = shuffleVar.deep_unpack() as boolean;
         this.shuffleStatus.set(
           shuffleBool ? ShuffleStatus.Enabled : ShuffleStatus.Disabled,
         );
@@ -211,7 +211,7 @@ export class Player {
     const canGoPrevVar = this.proxy!.get_cached_property("CanGoPrevious");
     if (canGoPrevVar) {
       try {
-        let canGoPrev = canGoPrevVar.deep_unpack() as boolean;
+        const canGoPrev = canGoPrevVar.deep_unpack() as boolean;
         this.canGoPrevious.set(canGoPrev);
       } catch (e) {
         this.canGoPrevious.set(false);
@@ -224,7 +224,7 @@ export class Player {
     const canGoNextVar = this.proxy!.get_cached_property("CanGoNext");
     if (canGoNextVar) {
       try {
-        let canGoNext = canGoNextVar.deep_unpack() as boolean;
+        const canGoNext = canGoNextVar.deep_unpack() as boolean;
         this.canGoNext.set(canGoNext);
       } catch (e) {
         this.canGoNext.set(false);
@@ -237,7 +237,7 @@ export class Player {
     const loopVar = this.proxy!.get_cached_property("LoopStatus");
     if (loopVar) {
       try {
-        let loopStr = loopVar.deep_unpack() as string;
+        const loopStr = loopVar.deep_unpack() as string;
         this.loopStatus.set(loopStr as LoopStatus);
       } catch (e) {
         this.loopStatus.set(LoopStatus.Unsupported);
@@ -250,7 +250,7 @@ export class Player {
     const canControlVar = this.proxy!.get_cached_property("CanControl");
     if (canControlVar) {
       try {
-        let canControl = canControlVar.deep_unpack() as boolean;
+        const canControl = canControlVar.deep_unpack() as boolean;
         this.canControl.set(canControl);
       } catch (e) {
         this.canControl.set(false);
@@ -267,7 +267,7 @@ export class Player {
     // Several possible locations in order of preference
     if (meta["mpris:artUrl"]) {
       try {
-        let artUrl = meta["mpris:artUrl"].deep_unpack();
+        const artUrl = meta["mpris:artUrl"].deep_unpack();
         // Convert URI to local file path if needed
         if (artUrl.startsWith("file://")) {
           this.coverArt.set(artUrl);
@@ -291,7 +291,7 @@ export class Player {
     for (const field of alternativeFields) {
       if (meta[field]) {
         try {
-          let artData = meta[field].deep_unpack();
+          const artData = meta[field].deep_unpack();
           if (typeof artData === "string") {
             this.coverArt.set(artData);
             return;
@@ -310,12 +310,12 @@ export class Player {
     changed: GLib.Variant,
     invalidated: GLib.Variant,
   ): void {
-    let dict: any = changed.deep_unpack();
+    const dict: any = changed.deep_unpack();
 
     if ("Metadata" in dict) {
-      let metaVariant = dict["Metadata"];
+      const metaVariant = dict["Metadata"];
       try {
-        let meta: any = metaVariant.deep_unpack();
+        const meta: any = metaVariant.deep_unpack();
         if (meta["xesam:title"]) {
           this.title.set(meta["xesam:title"].deep_unpack());
         } else {
@@ -332,7 +332,7 @@ export class Player {
         }
         // Extract track length from metadata.
         if (meta["mpris:length"]) {
-          let lengthNumber =
+          const lengthNumber =
             (meta["mpris:length"].deep_unpack() as number) / 1000000;
           this.trackLength.set(lengthNumber);
         } else {
@@ -351,7 +351,7 @@ export class Player {
     }
     if ("PlaybackStatus" in dict) {
       try {
-        let pbStr = dict["PlaybackStatus"].deep_unpack() as string;
+        const pbStr = dict["PlaybackStatus"].deep_unpack() as string;
         this.playbackStatus.set(pbStr as PlaybackStatus);
       } catch (e) {
         this.playbackStatus.set(null);
@@ -359,7 +359,7 @@ export class Player {
     }
     if ("Position" in dict) {
       try {
-        let posNumber = dict["Position"].deep_unpack() as number;
+        const posNumber = dict["Position"].deep_unpack() as number;
         this.position.set(posNumber);
       } catch (e) {
         this.position.set(0);
@@ -367,7 +367,7 @@ export class Player {
     }
     if ("Shuffle" in dict) {
       try {
-        let shuffleBool = dict["Shuffle"].deep_unpack() as boolean;
+        const shuffleBool = dict["Shuffle"].deep_unpack() as boolean;
         this.shuffleStatus.set(
           shuffleBool ? ShuffleStatus.Enabled : ShuffleStatus.Disabled,
         );
@@ -377,7 +377,7 @@ export class Player {
     }
     if ("CanGoPrevious" in dict) {
       try {
-        let canGoPrev = dict["CanGoPrevious"].deep_unpack() as boolean;
+        const canGoPrev = dict["CanGoPrevious"].deep_unpack() as boolean;
         this.canGoPrevious.set(canGoPrev);
       } catch (e) {
         this.canGoPrevious.set(false);
@@ -385,7 +385,7 @@ export class Player {
     }
     if ("CanGoNext" in dict) {
       try {
-        let canGoNext = dict["CanGoNext"].deep_unpack() as boolean;
+        const canGoNext = dict["CanGoNext"].deep_unpack() as boolean;
         this.canGoNext.set(canGoNext);
       } catch (e) {
         this.canGoNext.set(false);
@@ -393,7 +393,7 @@ export class Player {
     }
     if ("LoopStatus" in dict) {
       try {
-        let loopStr = dict["LoopStatus"].deep_unpack() as string;
+        const loopStr = dict["LoopStatus"].deep_unpack() as string;
         this.loopStatus.set(loopStr as LoopStatus);
       } catch (e) {
         this.loopStatus.set(LoopStatus.Unsupported);
@@ -402,7 +402,7 @@ export class Player {
 
     if ("CanControl" in dict) {
       try {
-        let canControl = dict["CanControl"].deep_unpack() as boolean;
+        const canControl = dict["CanControl"].deep_unpack() as boolean;
         this.canControl.set(canControl);
       } catch (e) {
         this.canControl.set(false);
@@ -449,11 +449,11 @@ export class Player {
     }
 
     // Create a GLib.Variant for the boolean.
-    let valueVariant = new GLib.Variant("b", boolValue);
+    const valueVariant = new GLib.Variant("b", boolValue);
 
     // Create parameters for the DBus method call.
     // The tuple contains: interface name, property name, and the value.
-    let parameters = new GLib.Variant("(ssv)", [
+    const parameters = new GLib.Variant("(ssv)", [
       "org.mpris.MediaPlayer2.Player",
       "Shuffle",
       valueVariant,
@@ -486,10 +486,10 @@ export class Player {
     }
 
     // Create a GLib.Variant for the new loop status. LoopStatus is a string.
-    let valueVariant = new GLib.Variant("s", status);
+    const valueVariant = new GLib.Variant("s", status);
 
     // Prepare the DBus parameters as a tuple: (interface, property, value)
-    let parameters = new GLib.Variant("(ssv)", [
+    const parameters = new GLib.Variant("(ssv)", [
       "org.mpris.MediaPlayer2.Player",
       "LoopStatus",
       valueVariant,
@@ -628,7 +628,7 @@ export class Player {
 
     // Create a tuple variant for the parameters.
     // The signature "(ox)" indicates a tuple with an object path ("o") and an int64 ("x").
-    let parameters = new GLib.Variant("(ox)", [trackId, newPosition * 1000000]);
+    const parameters = new GLib.Variant("(ox)", [trackId, newPosition * 1000000]);
 
     // Call the "SetPosition" method on the MPRIS interface.
     this.proxy.call(
@@ -678,11 +678,11 @@ export class Mpris {
       null,
       (connection, res, data) => {
         try {
-          let result: GLib.Variant = Gio.DBus.session.call_finish(res);
+          const result: GLib.Variant = Gio.DBus.session.call_finish(res);
           // The ListNames call returns an array of names.
           // @ts-ignore
-          let names: string[] = result.deep_unpack()[0];
-          for (let name of names) {
+          const names: string[] = result.deep_unpack()[0];
+          for (const name of names) {
             if (name.startsWith("org.mpris.MediaPlayer2")) {
               this._addPlayer(name);
             }
@@ -705,7 +705,7 @@ export class Mpris {
       (conn, senderName, objectPath, interfaceName, signalName, parameters) => {
         // The signal parameters are [name, old_owner, new_owner].
         // @ts-ignore
-        let [name, oldOwner, newOwner] = parameters.deep_unpack();
+        const [name, oldOwner, newOwner] = parameters.deep_unpack();
         if (!name.startsWith("org.mpris.MediaPlayer2")) return;
 
         if (newOwner !== "") {
@@ -723,7 +723,7 @@ export class Mpris {
     if (!this.players.get().find((player) => player.busName === busName)) {
       log("Adding player: " + busName);
       try {
-        let player = new Player(busName);
+        const player = new Player(busName);
         this.players.set(this.players.get().concat(player));
       } catch (e) {
         print("Failed to add player: " + busName);

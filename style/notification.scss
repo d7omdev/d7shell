@@ -9,6 +9,8 @@ $window-border-radius: 6px 6px 6px 6px;
 
 .notifications-container {
   border-radius: $rounded-xl;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
   min-width: 400px;
   min-height: 400px;
   // padding: 10px 10px 0;

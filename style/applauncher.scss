@@ -3,11 +3,10 @@
 @use "colors.scss" as *;
 
 .applauncher-container {
-  font-size: 4rem;
-  min-height: 550px;
-  min-width: 420px;
-  // background: $surface_transparent;
-  padding: 5px;
+  font-size: 1rem;
+  min-height: 300px;
+  min-width: 500px;
+  padding: 8px;
   border-radius: 8px;
 
   .background-entry {
@@ -17,39 +16,36 @@
   }
 
   > overlay {
-    margin-top: 6px;
+    margin-top: 4px;
+    margin-bottom: 8px;
 
     entry {
       outline: none;
       background: $surface_transparent;
-      // padding: 20px;
       border: none;
-      outline: none;
       caret-color: $on_surface;
       color: $on_surface;
-      margin-top: 2px;
-      padding: 0px;
+      padding: 8px 12px;
       border-radius: 12px;
-      // border-bottom: 1px solid $inverse_surface_transparent;
-      // border-top: 1px solid $inverse_surface_transparent;
+      min-height: 40px;
+      max-height: 50px;
       box-shadow:
         0px 4px 6px rgba(0, 0, 0, 0.1),
         0px 1px 3px rgba(0, 0, 0, 0.06);
 
       image {
-        -gtk-icon-size: 1.5rem;
-        margin-left: 0.5rem;
-        margin-right: 0.5rem;
-        // border-radius: 20px;
+        -gtk-icon-size: 18px;
+        margin-left: 4px;
+        margin-right: 8px;
       }
 
       text {
-        font-size: 1.2rem;
+        font-size: 14px;
         font-weight: 500;
         color: $on_surface;
 
         placeholder {
-          font-size: 1.2rem;
+          font-size: 14px;
           color: $on_surface;
         }
       }
@@ -65,30 +61,40 @@
     box-shadow:
       0px 4px 6px rgba(0, 0, 0, 0.1),
       0px 1px 3px rgba(0, 0, 0, 0.06);
-    border-radius: 1rem;
-    padding: 10px;
-    padding-top: 16px;
+    border-radius: 12px;
+    padding: 12px;
 
     box {
       outline-width: 2px;
 
       .not-found label {
-        font-size: 1rem;
+        font-size: 14px;
       }
     }
   }
 
   .app-button {
-    -gtk-icon-size: 2rem;
-    min-height: 50px;
-    padding: 0.2rem 0.4rem;
+    -gtk-icon-size: 28px;
+    min-height: 48px;
+    padding: 8px 12px;
+    margin: 2px 0;
     color: $on_surface;
-    border-radius: 20px;
+    border-radius: 8px;
 
-    // background-color: $inverse_surface_transparent;
     image {
-      margin-right: 6px;
-      margin-left: 0.5rem;
+      margin-right: 8px;
+      margin-left: 4px;
+    }
+
+    label.name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    label.description {
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba($on_surface, 0.7);
     }
 
     &:active {
@@ -105,6 +111,15 @@
       outline-color: $primary;
       background: $primary;
       color: $on_primary;
+
+      label.description {
+        color: rgba($on_primary, 0.8);
+      }
+
+      &:hover {
+        background: $primary;
+        color: $on_primary;
+      }
     }
 
     &:hover {
@@ -112,31 +127,32 @@
       color: $on_surface;
     }
 
-    .description {
-      // color: $on_surface;
-      font-size: 0.85rem;
-      font-weight: 400;
-    }
-
     &.math-result {
-      min-height: 80px;
-      padding: 1rem 1.5rem;
+      min-height: 72px;
+      padding: 16px 20px;
+      margin: 4px 0;
 
       .math-expression {
-        font-size: 1.8rem;
+        font-size: 16px;
         font-weight: 600;
         color: $on_surface;
       }
 
       .math-result {
-        font-size: 2.2rem;
+        font-size: 20px;
         font-weight: 700;
         color: $primary;
       }
 
       image {
-        margin: 0 1rem;
+        margin: 0 12px;
         color: $on_surface;
+        -gtk-icon-size: 20px;
+      }
+
+      label.description {
+        font-size: 12px;
+        margin-top: 4px;
       }
 
       &:hover {
@@ -165,18 +181,33 @@
         image {
           color: $on_primary;
         }
+
+        label.description {
+          color: rgba($on_primary, 0.8);
+        }
       }
     }
 
     &.clipboard-result {
-      min-height: 60px;
-      padding: 0.8rem 1rem;
+      min-height: 44px;
+      max-height: 50px;
+      padding: 6px 10px;
+
+      image {
+        margin-right: 6px;
+        margin-left: 3px;
+      }
 
       .clipboard-preview {
-        font-size: 0.95rem;
+        font-size: 12px;
         font-weight: 500;
         color: $on_surface;
-        line-height: 1.3;
+        line-height: 1.2;
+        word-wrap: break-word;
+      }
+
+      label.description {
+        font-size: 10px;
       }
 
       &:hover {
@@ -188,6 +219,34 @@
       &:focus {
         .clipboard-preview {
           color: $on_primary;
+        }
+      }
+    }
+
+    &.emoji-result {
+      max-height: 20px !important;
+      padding: 6px 10px;
+      margin: 1px 0;
+
+      .emoji-display {
+        font-size: 20px;
+        margin-right: 8px;
+        min-width: 20px;
+      }
+
+      .emoji-name {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      label.description {
+        font-size: 11px;
+        color: rgba($on_surface, 0.6);
+      }
+
+      &:focus {
+        label.description {
+          color: rgba($on_primary, 0.7);
         }
       }
     }
