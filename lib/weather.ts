@@ -186,9 +186,9 @@ function updateWeatherData() {
         max_temperature: Math.max(...hourlyTempsToday),
         temperature_range_unit: rawObject.hourly_units.temperature_2m,
       });
-      console.log(
-        `🌤️  Weather: ${rawObject.current.temperature_2m}°${rawObject.current_units.temperature_2m} (${location.city})`,
-      );
+      // console.log(
+      //   `🌤️  Weather: ${rawObject.current.temperature_2m}°${rawObject.current_units.temperature_2m} (${location.city})`,
+      // );
       // update this only if successful so that it retries in 5 minutes
       lastWeatherUpdate = GLib.get_real_time();
       isUpdating = false;

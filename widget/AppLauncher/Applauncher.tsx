@@ -454,9 +454,9 @@ function SearchEntry() {
                 self.set_text("");
                 self.grab_focus();
 
-                self.connect("focus-out-event", () => {
-                  return false;
-                });
+                // self.connect("focus-out-event", () => {
+                //   return false;
+                // });
               }
             });
           }}

@@ -192,7 +192,6 @@ function MediaPlayer({ player }: { player: AstalMpris.Player }) {
 }
 
 const isRealPLayer = (player: AstalMpris.Player) => {
-  console.log("Checking if player is real:", player.bus_name);
   return !player.bus_name.includes("kdeconnect");
 };
 
@@ -203,10 +202,6 @@ export default function MediaPlayers() {
 
   const players = mpris.get_players();
 
-  console.log(
-    "Found players:",
-    players.map((p) => p.busName),
-  );
   if (players.length === 0) {
     return <box />;
   }

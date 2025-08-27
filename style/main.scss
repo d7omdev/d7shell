@@ -58,7 +58,7 @@ popover.tray-menu {
 
 /* model buttons */
 popover.tray-menu modelbutton {
-  color: #cdd6f4;
+  color: $on_surface;
   font-size: 13px;
   padding: 2px 12px;
   border-radius: 12px;
@@ -66,12 +66,12 @@ popover.tray-menu modelbutton {
 
 /* Hover effect */
 popover.tray-menu modelbutton:hover {
-  background: #313244;
-  color: #ffffff;
+  background: $primary;
+  color: $on_primary;
 }
 
 /* Optional: separators inside menus */
 popover.tray-menu separator {
-  margin: 4px 0;
-  background: #45475a;
+  margin: 8px 0;
+  background: $surface;
 }

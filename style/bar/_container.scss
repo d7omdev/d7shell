@@ -6,7 +6,6 @@
 .bar-container {
   background: $surface_transparent;
   color: $on_surface;
-  min-height: 30px;
   padding: 2px;
   font-size: 14px;
   font-weight: 500;
@@ -15,7 +14,6 @@
   margin-right: 1rem;
   margin-left: 1rem;
   margin-top: 0.25rem;
-  margin-bottom: -0.3rem;
 
   separator {
     min-width: 5px;

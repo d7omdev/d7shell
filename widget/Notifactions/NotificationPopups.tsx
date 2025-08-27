@@ -152,7 +152,6 @@ export default function NotificationPopups(
 ): Astal.Window {
   const notifs = new NotificationMap();
   const { TOP, RIGHT } = Astal.WindowAnchor;
-  const notifd = AstalNotifd.get_default();
 
   return (
     <window
@@ -162,7 +161,7 @@ export default function NotificationPopups(
         return values.length !== 0;
       })}
       margin={10}
-      margin_right={0}
+      margin_right={10}
       monitor={monitor.id}
       anchor={TOP | RIGHT}
       child={

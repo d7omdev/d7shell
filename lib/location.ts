@@ -78,9 +78,9 @@ async function initializeLocation() {
   if (location) {
     currentLocation.set(location);
     locationError.set(null);
-    console.log(
-      `📍 Location: ${location.city}, ${location.region}, ${location.country}`,
-    );
+    // console.log(
+    //   `📍 Location: ${location.city}, ${location.region}, ${location.country}`,
+    // );
   } else {
     currentLocation.set(null);
     locationError.set("Failed to detect location from IP address");

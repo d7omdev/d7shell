@@ -17,7 +17,6 @@ function FocusedAppLabels({
     <box
       orientation={Gtk.Orientation.VERTICAL}
       spacing={0}
-      marginBottom={4}
       cssClasses={["focused-app-labels"]}
     >
       <label
@@ -90,7 +89,7 @@ export default () => {
           <box
             spacing={4}
             margin_top={1}
-            margin_bottom={5}
+            margin_bottom={1}
             cssClasses={["bar_module", "on", "active-apps-container"]}
           >
             {sortedClients.as((clientsList) => {
