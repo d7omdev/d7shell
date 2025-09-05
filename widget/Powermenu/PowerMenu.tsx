@@ -67,7 +67,7 @@ export default function PowerMenu(_gdkmonitor: Gdk.Monitor) {
                 cssClasses={["powermenu-container"]}
                 rowSpacing={6}
                 columnSpacing={6}
-                maxChildrenPerLine={4}
+                maxChildrenPerLine={5}
                 margin_bottom={20}
                 setup={(self) => {
                   self.connect("child-activated", (_, child) => {
@@ -79,6 +79,7 @@ export default function PowerMenu(_gdkmonitor: Gdk.Monitor) {
                 <SysButton action={"logout"} label={"Log Out"} />
                 <SysButton action={"reboot"} label={"Reboot"} />
                 <SysButton action={"shutdown"} label={"Shutdown"} />
+                <SysButton action={"lockscreen"} label={"Lock"} />
               </FlowBox>
               {/* <revealer */}
               {/*   transitionType={Gtk.RevealerTransitionType.SLIDE_UP} */}

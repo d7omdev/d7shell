@@ -59,8 +59,8 @@
 
           slider {
             background-color: $on_surface;
-            min-height: $width;
-            min-width: $width;
+            min-height: 1px;
+            min-width: 1px;
             margin: -0.12em;
           }
         }

@@ -19,7 +19,7 @@ export default function TrayPanelButton() {
             popoverMenu.insert_action_group("dbusmenu", item.actionGroup);
           }
 
-          self.set_popover(popoverMenu as Gtk.Popover);
+          self.set_popover(popoverMenu);
 
           const actionGroupHandler = item.connect(
             "notify::action-group",
@@ -75,7 +75,7 @@ export default function TrayPanelButton() {
     <box
       cssClasses={["tray_style"]}
       spacing={4}
-      marginBottom={3}
+      marginBottom={1}
       halign={Gtk.Align.END}
       valign={Gtk.Align.CENTER}
       homogeneous={false}

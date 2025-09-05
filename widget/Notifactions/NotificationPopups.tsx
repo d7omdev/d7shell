@@ -33,25 +33,25 @@ class NotificationMap implements Subscribable {
 
     notifd.connect("notified", (_, id) => {
       const notification = notifd.get_notification(id);
-      console.log("Received notification:", {
-        id: notification.id,
-        appName: notification.appName,
-        summary: notification.summary,
-        body: notification.body,
-        urgency: notification.urgency,
-        time: notification.time,
-        appIcon: notification.appIcon,
-        image: notification.image,
-        desktopEntry: notification.desktopEntry,
-        actions: notification.get_actions
-          ? notification.get_actions().map((a) => {
-              return {
-                name: a.id,
-                label: a.label,
-              };
-            })
-          : undefined,
-      });
+      // console.log("Received notification:", {
+      //   id: notification.id,
+      //   appName: notification.appName,
+      //   summary: notification.summary,
+      //   body: notification.body,
+      //   urgency: notification.urgency,
+      //   time: notification.time,
+      //   appIcon: notification.appIcon,
+      //   image: notification.image,
+      //   desktopEntry: notification.desktopEntry,
+      //   actions: notification.get_actions
+      //     ? notification.get_actions().map((a) => {
+      //         return {
+      //           name: a.id,
+      //           label: a.label,
+      //         };
+      //       })
+      //     : undefined,
+      // });
       if (notifd.dontDisturb) return;
 
       let timeoutHandle: ReturnType<typeof timeout> | null = null;
@@ -161,6 +161,7 @@ export default function NotificationPopups(
         return values.length !== 0;
       })}
       margin={10}
+      layer={Astal.Layer.OVERLAY}
       margin_right={10}
       monitor={monitor.id}
       anchor={TOP | RIGHT}

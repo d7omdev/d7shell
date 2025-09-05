@@ -3,6 +3,7 @@ import { App, Astal, Gdk, Gtk } from "astal/gtk4";
 import AstalBattery from "gi://AstalBattery";
 import AstalBluetooth from "gi://AstalBluetooth";
 import AstalNetwork from "gi://AstalNetwork";
+import AstalWp from "gi://AstalWp?version=0.1";
 import { FlowBox } from "../../common/FlowBox";
 import PopupWindow from "../../common/PopupWindow";
 import ScreenRecord from "../../lib/screenrecord";
@@ -17,6 +18,7 @@ import RecordQS from "./buttons/RecordQS";
 import MediaPlayers from "./MediaPlayer";
 import BatteryPage from "./pages/BatteryPage";
 import BluetoothPage from "./pages/BluetoothPage";
+import MediaSourcesPage from "./pages/MediaSourcesPage";
 import SpeakerPage from "./pages/SpeakerPage";
 import WifiPage from "./pages/WifiPage";
 import VolumeBox from "./VolumeBox";
@@ -38,6 +40,7 @@ const layout = Variable.derive(
 );
 
 function QSButtons() {
+  const wp = AstalWp.get_default();
   return (
     // @ts-ignore
     <FlowBox
@@ -53,6 +56,7 @@ function QSButtons() {
       <MicQS />
       <DontDisturbQS />
       <ToggleWarm />
+      {wp?.audio && <MediaSourcesArrowButton />}
       {/* <RecordQS /> */}
     </FlowBox>
   );
@@ -283,6 +287,113 @@ function WifiBluetooth() {
   );
 }
 
+function ConnectivityButtons() {
+  const bluetooth = AstalBluetooth.get_default();
+  const wifi = AstalNetwork.get_default()?.wifi;
+
+  if (!bluetooth) return null;
+  const btAdapter = bluetooth.adapter;
+  const deviceConnected = Variable.derive(
+    [bind(bluetooth, "devices"), bind(bluetooth, "isConnected")],
+    (d, _) => {
+      for (const device of d) {
+        if (device.connected) return device.name;
+      }
+      return "No device";
+    },
+  );
+
+  return (
+    <box
+      homogeneous
+      spacing={6}
+      onDestroy={() => {
+        deviceConnected.drop();
+      }}
+    >
+      {!!wifi && <WifiArrowButton />}
+      <ArrowButton
+        icon={bind(btAdapter, "powered").as(
+          (p) => `bluetooth-${p ? "" : "disabled-"}symbolic`,
+        )}
+        title="Bluetooth"
+        subtitle={deviceConnected()}
+        onClicked={() => bluetooth.toggle()}
+        onArrowClicked={() => {
+          qsPage.set("bluetooth");
+        }}
+        connection={[btAdapter, "powered"]}
+      />
+    </box>
+  );
+}
+
+function MediaSourcesArrowButton() {
+  const wp = AstalWp.get_default();
+  if (!wp || !wp.audio) return null;
+
+  const audio = wp.audio;
+  const defaultSpeaker = wp.defaultSpeaker;
+
+  const sourceCount = Variable.derive([bind(audio, "streams")], (streams) => {
+    const audioStreams = streams.filter(
+      (stream) =>
+        stream.mediaClass === AstalWp.MediaClass.STREAM_OUTPUT_AUDIO ||
+        stream.mediaClass === AstalWp.MediaClass.STREAM_INPUT_AUDIO,
+    );
+    return `${audioStreams.length} apps`;
+  });
+
+  return (
+    <box
+      overflow={Gtk.Overflow.HIDDEN}
+      cssClasses={bind(defaultSpeaker, "mute").as((muted) => {
+        const classes = ["arrow-button"];
+        !muted && classes.push("active"); // Active when NOT muted
+        return classes;
+      })}
+    >
+      <button
+        onClicked={() => {
+          // Toggle mute on default speaker as main action
+          if (defaultSpeaker) {
+            defaultSpeaker.set_mute(!defaultSpeaker.mute);
+          }
+        }}
+        child={
+          <box halign={Gtk.Align.START} hexpand>
+            <image
+              iconName="applications-multimedia-symbolic"
+              iconSize={Gtk.IconSize.LARGE}
+            />
+            <box vertical>
+              <label
+                xalign={0}
+                label="Media"
+                cssClasses={["title"]}
+                maxWidthChars={8}
+              />
+              <label
+                xalign={0}
+                label={sourceCount()}
+                cssClasses={["subtitle"]}
+                maxWidthChars={8}
+              />
+            </box>
+          </box>
+        }
+      />
+      <button
+        iconName={"go-next-symbolic"}
+        cssClasses={["next-page"]}
+        onClicked={() => {
+          qsPage.set("media-sources");
+        }}
+      />
+    </box>
+  );
+}
+
 function MainPage() {
   return (
     <box cssClasses={["qs-page"]} name={"main"} vertical spacing={6}>
@@ -291,7 +402,7 @@ function MainPage() {
       <VolumeBox />
       <BrightnessBox />
       {/* <Gtk.Separator /> */}
-      <WifiBluetooth />
+      <ConnectivityButtons />
       <QSButtons />
       <QSButtons_child />
       <MediaPlayers />
@@ -324,6 +435,7 @@ function QSWindow(_gdkmonitor: Gdk.Monitor) {
               <MainPage />
               <BatteryPage />
               <SpeakerPage />
+              <MediaSourcesPage />
               <WifiPage />
               <BluetoothPage />
             </stack>

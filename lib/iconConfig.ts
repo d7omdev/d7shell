@@ -100,6 +100,7 @@ export const iconConfig = {
     reboot: "view-refresh-symbolic",
     logout: "system-log-out-symbolic",
     shutdown: "system-shutdown-symbolic",
+    lock: "system-lock-screen-symbolic",
   },
   brightness: {
     indicator: "display-brightness-symbolic",

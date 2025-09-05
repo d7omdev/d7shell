@@ -240,4 +240,28 @@
       padding-top: 0;
     }
   }
+
+  .app-audio-control {
+    .mute-button {
+      padding: 0.5rem;
+      border-radius: 9999px;
+      min-height: 1rem;
+      min-width: 1.5rem;
+      color: $on_surface;
+      background-color: $inverse_surface_transparent;
+      transition:
+        background-color 200ms ease,
+        transform 200ms ease;
+
+      &:hover {
+        background-color: $inverse_surface_transparent_variant;
+        transform: scale(0.96);
+      }
+
+      &.active {
+        background-color: $primary;
+        color: $on_primary;
+      }
+    }
+  }
 }

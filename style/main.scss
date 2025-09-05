@@ -42,9 +42,9 @@ scale {
 
   slider {
     background-color: $on_surface;
-    min-height: $width;
-    min-width: $width;
-    margin: -0.6em;
+    min-height: 12px;
+    min-width: 12px;
+    margin: -6px;
   }
 }
 

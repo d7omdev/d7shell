@@ -2,4 +2,6 @@
 
 cd ~/Projects/d7shell/ || exit
 
-bun run start
+bun bundle
+
+bun run start >/dev/null &
