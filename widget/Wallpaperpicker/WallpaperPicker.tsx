@@ -101,7 +101,7 @@ function createWallpaperButton(
         );
         await sh([
           "sh",
-          `${GLib.getenv("HOME")}/Projects/d7shell/scripts/changecolor.sh`,
+          `${GLib.getenv("HOME")}/.config/ags/scripts/changecolor.sh`,
           `${path}/${filename}`,
           modeNow,
         ]);

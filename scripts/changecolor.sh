@@ -2,7 +2,7 @@
 # Get wallpaper path and theme mode
 wallpaper="$1"
 mode="$2"
-project_path="$HOME/Projects/d7shell"
+project_path="$HOME/.config/ags"
 
 # Generate colors based on the specified mode
 if [ "$mode" = "light" ]; then
@@ -133,7 +133,7 @@ try:
         scss_content += '\$inverse_surface_transparent_overlay: linear-gradient(\n  0deg,\n  \$inverse_surface_transparent,\n  \$inverse_surface_transparent\n);\n'
         scss_content += '\$inverse_surface_transparent_variant_overlay: linear-gradient(\n  0deg,\n  \$inverse_surface_transparent_variant,\n  \$inverse_surface_transparent_variant\n);\n'
 
-    project_path = os.path.expanduser('~/Projects/d7shell')
+    project_path = os.path.expanduser('~/.config/ags')
     colors_file = os.path.join(project_path, 'style', 'colors.scss')
 
     with open(colors_file, 'w') as f:

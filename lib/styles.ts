@@ -2,7 +2,7 @@ import { GLib, Gio, execAsync, monitorFile, timeout } from "astal";
 import { App } from "astal/gtk4";
 
 export function monitorColorsChange() {
-  const styleDir = `${GLib.getenv("HOME")}/Projects/d7shell/style`;
+  const styleDir = `${GLib.getenv("HOME")}/.config/ags/style`;
   let isCompiling = false;
   let lastCompilationTime = 0;
 

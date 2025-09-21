@@ -2,7 +2,7 @@ import { execAsync, GLib } from "astal";
 import { mkOptions, opt } from "./lib/option";
 import { gsettings } from "./lib/utils";
 
-const options = mkOptions(`${GLib.get_user_config_dir()}/d7shell/config.json`, {
+const options = mkOptions(`${GLib.get_user_config_dir()}/ags/config.json`, {
   wallpaper: {
     // folder: opt(`${GLib.get_home_dir()}/Pictures/Star`, { cached: true }),
     folder: opt(`${GLib.get_home_dir()}/Downloads/Images/Wallpapers`, {

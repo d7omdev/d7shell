@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 import os
 
-PROJECT_PATH = Path.home() / "Projects/d7shell"
+PROJECT_PATH = Path.home() / ".config/ags"
 SCSS_FILE = PROJECT_PATH / "style/colors.scss"
 STARSHIP_TEMPLATE = Path.home() / ".config/matugen/templates/starship-colors.toml"
 STARSHIP_CONFIG = Path.home() / ".config/starship.toml"

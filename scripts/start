@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd ~/Projects/d7shell/ || exit
+cd ~/.config/ags/ || exit
 
 bun bundle
 

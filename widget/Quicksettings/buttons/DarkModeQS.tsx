@@ -17,8 +17,8 @@ export default function DarkModeQS() {
 
       sh([
         "sh",
-        // `${GLib.get_user_config_dir()}/ags/scripts/changecolor.sh`,
-        `${GLib.getenv("HOME")}/Projects/d7shell/scripts/changecolor.sh`,
+        `${GLib.get_user_config_dir()}/ags/scripts/changecolor.sh`,
+        // `${GLib.getenv("HOME")}/Projects/d7shell/scripts/changecolor.sh`,
         current_wallpaper,
         newMode,
       ]);
